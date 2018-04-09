@@ -59,13 +59,25 @@ for (var i = 0; i < PROPERTIES_AMOUNT; i++) {
   similarProperties.push(similarProperty);
 }
 
+var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var mapCardPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 var mapPinsList = document.querySelector('.map__pins');
+var mapFilters = document.querySelector('.map__filters-container');
+
 
 var pinElement = mapCardPinTemplate.cloneNode(true);
+var mapCardElement = mapCardTemplate.cloneNode(true);
 
-pinElement.querySelector('.map__pin').style.left = '100px';
-pinElement.querySelector('.map__pin').style.top = '100px';
+pinElement.style.left = similarProperties[0].location.x + 'px';
+pinElement.style.top = similarProperties[0].location.y + 'px';
+pinElement.querySelector('img').src = similarProperties[0].author.avatar;
+console.log(similarProperties[0].offer.title);
+pinElement.querySelector('img').alt = similarProperties[0].offer.title;
+
 mapPinsList.appendChild(pinElement);
 
+mapCardElement.querySelector('.popup__title').textContent = similarProperties[0].offer.title;
+mapCardElement.querySelector('.popup__text--address').textContent = similarProperties[0].offer.address;
+
+userDialog.insertBefore(mapCardElement, mapFilters);
 
