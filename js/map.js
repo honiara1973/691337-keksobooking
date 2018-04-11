@@ -3,7 +3,7 @@
 var PROPERTIES_AMOUNT = 8;
 var HOTEL_TITLE = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
   'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var HOTEL_TYPE = ['palace', 'flat', 'house', 'bungalo'];
+var HOTEL_TYPE = [['palace', 'Дворец'], ['flat', 'Квартира'], ['house', 'Дом'], ['bungalo', 'Бунгало']];
 var HOTEL_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var HOTEL_CHECKIN_TIME = ['12:00', '13:00', '14:00'];
 var HOTEL_CHECKOUT_TIME = ['12:00', '13:00', '14:00'];
@@ -41,7 +41,7 @@ for (var i = 0; i < PROPERTIES_AMOUNT; i++) {
       title: HOTEL_TITLE.splice(getRandomInt(0, HOTEL_TITLE.length - 1), 1),
       address: locationX.toString() + ', ' + locationY.toString(),
       price: getRandomInt(1000, 1000000),
-      type: getRandomElement(HOTEL_TYPE),
+      type: getRandomElement(HOTEL_TYPE)[1],
       rooms: getRandomInt(1, 5),
       guests: getRandomInt(1, 10),
       checkin: getRandomElement(HOTEL_CHECKIN_TIME),
@@ -63,16 +63,21 @@ var mapCardTemplate = document.querySelector('template').content.querySelector('
 var mapCardPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 var mapPinsList = document.querySelector('.map__pins');
 var mapFilters = document.querySelector('.map__filters-container');
+var pinWidth =  mapCardPinTemplate.querySelector('img').width;
+var pinHeight = mapCardPinTemplate.querySelector('img').height;
 
 var renderPinElement = function() {
-  var pinElement = mapCardPinTemplate.cloneNode(true);  
-  pinElement.style.left = similarProperties[i].location.x + 'px'; //изменить положение метки  на ее размер
-  pinElement.style.top = similarProperties[i].location.y + 'px';
+  var pinElement = mapCardPinTemplate.cloneNode(true); 
+  pinElement.style.left = (similarProperties[i].location.x - pinWidth / 2) + 'px';
+  pinElement.style.top = (similarProperties[i].location.y - pinHeight) + 'px';
   pinElement.querySelector('img').src = similarProperties[i].author.avatar;
   pinElement.querySelector('img').alt = similarProperties[i].offer.title;
 
   return pinElement;
 };
+
+console.log(pinWidth);
+console.log(pinHeight);
 
 var fragmentPinElement = document.createDocumentFragment();
   
@@ -87,18 +92,40 @@ var renderCardElement = function () {
   mapCardElement.querySelector('.popup__title').textContent = similarProperties[i].offer.title;
   mapCardElement.querySelector('.popup__text--address').textContent = similarProperties[i].offer.address;
   mapCardElement.querySelector('.popup__text--price').textContent = similarProperties[i].offer.price + '₽/ночь';
-  mapCardElement.querySelector('.popup__type').textContent = similarProperties[i].offer.type;  //перевод не сделан
+  mapCardElement.querySelector('.popup__type').textContent = similarProperties[i].offer.type;
   mapCardElement.querySelector('.popup__text--capacity').textContent = similarProperties[i].offer.rooms + ' комнаты'
- + ' для ' + similarProperties[i].offer.guests + ' гостей';  //Изменить для 1, 5: комнаты на комнат
+ + ' для ' + similarProperties[i].offer.guests + ' гостей';
   mapCardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarProperties[i].offer.checkin +  
 ', выезд до ' + similarProperties[i].offer.checkout;
 
-  //Не сделала картинками, как в шаблоне
-  mapCardElement.querySelector('.popup__features').textContent = similarProperties[i].offer.features; 
-  mapCardElement.querySelector('.popup__description').textContent = similarProperties[i].offer.description;
+  var mapCardFeatures = mapCardElement.querySelector('.popup__features');
+  mapCardFeatures.querySelector('.popup__feature--wifi').textContent = similarProperties[i].offer.features[0];
+  mapCardFeatures.querySelector('.popup__feature--dishwasher').textContent = similarProperties[i].offer.features[1];
+  mapCardFeatures.querySelector('.popup__feature--parking').textContent = similarProperties[i].offer.features[2];
+  mapCardFeatures.querySelector('.popup__feature--washer').textContent = similarProperties[i].offer.features[3];
+  mapCardFeatures.querySelector('.popup__feature--elevator').textContent = similarProperties[i].offer.features[4];
+  mapCardFeatures.querySelector('.popup__feature--conditioner').textContent = similarProperties[i].offer.features[5];
 
-  //photos пока не знаю, как сделать
-  //mapCardElement.querySelector('.popup__photos').content.querySelector('.popup__photo').src = similarProperties[0].offer.photos; 
+  //mapCardElement.querySelector('.popup__features').textContent = similarProperties[i].offer.features; 
+  mapCardElement.querySelector('.popup__description').textContent = similarProperties[i].offer.description;
+  
+  var mapCardPhotos = mapCardElement.querySelector('.popup__photos');
+  mapCardPhotos.querySelector('.popup__photo').src = similarProperties[i].offer.photos[0];
+  
+  /* var getMapCardPhotos = function() {
+    for (var j = 0; j < similarProperties[i].offer.photos.length; j++) {
+    var mapCardPhoto = document.createElement('img');
+    mapCardPhoto.classList.add('popup__photo');
+    mapCardPhoto.src = similarProperties.offer.photos[j];
+    mapCardPhotos.appendChild(mapCardPhoto);
+    } 
+    return mapCardPhotos;
+  };
+
+  mapCardPhotos = getMapCardPhotos ();
+*/
+
+  mapCardElement.querySelector('.popup__avatar').src = similarProperties[i].author.avatar;
 
   return mapCardElement;
 };
