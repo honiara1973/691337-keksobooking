@@ -105,7 +105,7 @@ var renderCardElement = function (data) {
     for (var j = 0; j < data.offer.features.length; j++) {
       var mapCardFeature = document.createElement('li');
       mapCardFeature.classList.add(data.offer.features[j][1]);
-      mapCardFeature.classList.add('.popup__feature');
+      mapCardFeature.classList.add('popup__feature');
       mapCardFeatures.appendChild(mapCardFeature);
     }
     return mapCardFeatures;
