@@ -14,7 +14,40 @@ var HOTEL_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http:
 var AVATAR_NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08'];
 
 var userDialog = document.querySelector('.map');
-userDialog.classList.remove('map--faded');
+var mapPinMain = userDialog.querySelector('.map__pin--main');
+
+var adForm = document.querySelector('.ad-form');
+var adFormFieldset = adForm.querySelectorAll('fieldset');
+var elementClassDisabled = 'ad-form__element--disabled';
+var elementAddress = adForm.querySelector('#address');
+
+var setElementDisabled = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    array[i].classList.add(elementClassDisabled);
+    array[i].style.opacity = '0.3';
+  }
+  return array;
+};
+
+setElementDisabled(adFormFieldset);
+
+var setElementEnabled = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    array[i].classList.remove(elementClassDisabled);
+    array[i].style.opacity = '1';
+  }
+  return array;
+};
+
+var setPinMainAddress = function () {
+  elementAddress.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
+};
+
+var onPinMainClick = function () {
+  userDialog.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  setElementEnabled(adFormFieldset);
+};
 
 var similarProperties = [];
 
@@ -66,6 +99,7 @@ var mapPinsList = document.querySelector('.map__pins');
 var mapFilters = document.querySelector('.map__filters-container');
 var pinWidth = mapCardPinTemplate.querySelector('img').width;
 var pinHeight = mapCardPinTemplate.querySelector('img').height;
+var fragmentCardElement = document.createDocumentFragment();
 
 var renderPinElement = function (data) {
   var pinElement = mapCardPinTemplate.cloneNode(true);
@@ -77,13 +111,40 @@ var renderPinElement = function (data) {
   return pinElement;
 };
 
-var fragmentPinElement = document.createDocumentFragment();
+mapPinMain.addEventListener('mouseup', function () {
+  onPinMainClick();
+  setPinMainAddress();
+  createSimilarPropertiesPins();
+  addSimilarPropertiesCards();
+});
 
-for (i = 0; i < similarProperties.length; i++) {
-  fragmentPinElement.appendChild(renderPinElement(similarProperties[i]));
-}
+var addSimilarPropertiesCards = function () {
+  var mapPins = mapPinsList.querySelectorAll('.map__pin');
+  for (i = 1; i < mapPins.length; i++) {
+    var mapPin = mapPins[i];
+    mapPin.addEventListener('click', function () {
+      createSimilarPropertiesCards();
+      userDialog.insertBefore(fragmentCardElement, mapFilters);
+    });
+  }
+};
 
-mapPinsList.appendChild(fragmentPinElement);
+var createSimilarPropertiesCards = function () {
+  for (i = 0; i < similarProperties.length; i++) {
+    fragmentCardElement.appendChild(renderCardElement(similarProperties[i]));
+  }
+  return fragmentCardElement;
+};
+
+var createSimilarPropertiesPins = function () {
+  var fragmentPinElement = document.createDocumentFragment();
+
+  for (i = 0; i < similarProperties.length; i++) {
+    fragmentPinElement.appendChild(renderPinElement(similarProperties[i]));
+  }
+  mapPinsList.appendChild(fragmentPinElement);
+  return mapPinsList;
+};
 
 var renderCardElement = function (data) {
   var mapCardElement = mapCardTemplate.cloneNode(true);
@@ -134,12 +195,3 @@ var renderCardElement = function (data) {
 
   return mapCardElement;
 };
-
-var fragmentCardElement = document.createDocumentFragment();
-
-for (i = 0; i < 1; i++) {
-  fragmentCardElement.appendChild(renderCardElement(similarProperties[0]));
-}
-
-userDialog.insertBefore(fragmentCardElement, mapFilters);
-
