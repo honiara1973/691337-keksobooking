@@ -106,6 +106,11 @@ var renderPinElement = function (data) {
   pinElement.style.top = (data.location.y - pinHeight) + 'px';
   pinElement.querySelector('img').src = data.author.avatar;
   pinElement.querySelector('img').alt = data.offer.title;
+  pinElement.addEventListener('click', function () {
+    var fragmentCardElement = document.createDocumentFragment();
+    fragmentCardElement.appendChild(renderCardElement(data));
+    userDialog.insertBefore(fragmentCardElement, mapFilters);
+  });
 
   return pinElement;
 };
@@ -114,7 +119,6 @@ mapPinMain.addEventListener('mouseup', function () {
   onPinMainClick();
   setPinMainAddress();
   createSimilarPropertiesPins();
-  addSimilarPropertiesCards();
 });
 
 var renderCardElement = function (data) {
@@ -175,21 +179,5 @@ var createSimilarPropertiesPins = function () {
   }
   mapPinsList.appendChild(fragmentPinElement);
   return mapPinsList;
-};
-
-var addSimilarPropertiesCards = function () {
-  var mapPins = mapPinsList.querySelectorAll('.map__pin');
-  for (i = 1; i < mapPins.length; i++) {
-    var mapPin = mapPins[i];
-    mapPin.setAttribute('data-index', i);
-    console.log(mapPin);
-  }
-
-  mapPin.addEventListener('click', function () {
-    //console.log(mapPin.dataset.index);
-    var fragmentCardElement = document.createDocumentFragment();
-    fragmentCardElement.appendChild(renderCardElement(similarProperties[mapPin.dataset.index]));
-    userDialog.insertBefore(fragmentCardElement, mapFilters);
-  });
 };
 
