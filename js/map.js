@@ -24,7 +24,7 @@ var elementAddress = adForm.querySelector('#address');
 var setElementDisabled = function (array) {
   for (var i = 0; i < array.length; i++) {
     array[i].classList.add(elementClassDisabled);
-    array[i].style.opacity = '0.3';
+    array[i].disabled = true;
   }
   return array;
 };
@@ -34,7 +34,7 @@ setElementDisabled(adFormFieldset);
 var setElementEnabled = function (array) {
   for (var i = 0; i < array.length; i++) {
     array[i].classList.remove(elementClassDisabled);
-    array[i].style.opacity = '1';
+    array[i].disabled = false;
   }
   return array;
 };
@@ -99,7 +99,6 @@ var mapPinsList = document.querySelector('.map__pins');
 var mapFilters = document.querySelector('.map__filters-container');
 var pinWidth = mapCardPinTemplate.querySelector('img').width;
 var pinHeight = mapCardPinTemplate.querySelector('img').height;
-var fragmentCardElement = document.createDocumentFragment();
 
 var renderPinElement = function (data) {
   var pinElement = mapCardPinTemplate.cloneNode(true);
@@ -117,34 +116,6 @@ mapPinMain.addEventListener('mouseup', function () {
   createSimilarPropertiesPins();
   addSimilarPropertiesCards();
 });
-
-var addSimilarPropertiesCards = function () {
-  var mapPins = mapPinsList.querySelectorAll('.map__pin');
-  for (i = 1; i < mapPins.length; i++) {
-    var mapPin = mapPins[i];
-    mapPin.addEventListener('click', function () {
-      createSimilarPropertiesCards();
-      userDialog.insertBefore(fragmentCardElement, mapFilters);
-    });
-  }
-};
-
-var createSimilarPropertiesCards = function () {
-  for (i = 0; i < similarProperties.length; i++) {
-    fragmentCardElement.appendChild(renderCardElement(similarProperties[i]));
-  }
-  return fragmentCardElement;
-};
-
-var createSimilarPropertiesPins = function () {
-  var fragmentPinElement = document.createDocumentFragment();
-
-  for (i = 0; i < similarProperties.length; i++) {
-    fragmentPinElement.appendChild(renderPinElement(similarProperties[i]));
-  }
-  mapPinsList.appendChild(fragmentPinElement);
-  return mapPinsList;
-};
 
 var renderCardElement = function (data) {
   var mapCardElement = mapCardTemplate.cloneNode(true);
@@ -195,3 +166,30 @@ var renderCardElement = function (data) {
 
   return mapCardElement;
 };
+
+var createSimilarPropertiesPins = function () {
+  var fragmentPinElement = document.createDocumentFragment();
+
+  for (i = 0; i < similarProperties.length; i++) {
+    fragmentPinElement.appendChild(renderPinElement(similarProperties[i]));
+  }
+  mapPinsList.appendChild(fragmentPinElement);
+  return mapPinsList;
+};
+
+var addSimilarPropertiesCards = function () {
+  var mapPins = mapPinsList.querySelectorAll('.map__pin');
+  for (i = 1; i < mapPins.length; i++) {
+    var mapPin = mapPins[i];
+    mapPin.setAttribute('data-index', i);
+    console.log(mapPin);
+  }
+
+  mapPin.addEventListener('click', function () {
+    //console.log(mapPin.dataset.index);
+    var fragmentCardElement = document.createDocumentFragment();
+    fragmentCardElement.appendChild(renderCardElement(similarProperties[mapPin.dataset.index]));
+    userDialog.insertBefore(fragmentCardElement, mapFilters);
+  });
+};
+
