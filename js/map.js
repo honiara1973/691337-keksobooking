@@ -27,27 +27,48 @@ var userPropertyTimeout = adForm.querySelector('#timeout');
 
 
 userPropertyType.addEventListener('change', function (evt) {
-  var option = evt.target;
-  option.selected = 'true';
-  
-  switch (option.value) {
+  var typeOption = evt.target;
+  typeOption.selected = 'true';
+
+  switch (typeOption.value) {
     case 'flat': userPropertyPrice.placeholder = '1000'; userPropertyPrice.min = '1000';
-    break;
+      break;
     case 'bungalo': userPropertyPrice.placeholder = '0'; userPropertyPrice.min = '0';
-    break;
+      break;
     case 'house': userPropertyPrice.placeholder = '5000'; userPropertyPrice.min = '5000';
-    break;
+      break;
     case 'palace': userPropertyPrice.placeholder = '10000'; userPropertyPrice.min = '10000';
-    break;
+      break;
   }
 });
 
 userPropertyTimein.addEventListener('change', function (evt) {
-  var option = evt.target;
-  option.selected = 'true';
-  console.log(option.value);
- // console.log(option.index); - не работает чего-то
- });
+  var timeinOption = evt.target;
+  timeinOption.selected = 'true';
+
+  var valueSelected = timeinOption.value;
+  var timeoutOptions = userPropertyTimeout.options;
+
+  for (var i = 0; i < timeoutOptions.length; i++) {
+    if (timeoutOptions[i].value === valueSelected) {
+      timeoutOptions[i].selected = 'true';
+    }
+  }
+});
+
+userPropertyTimeout.addEventListener('change', function (evt) {
+  var timeoutOption = evt.target;
+  timeoutOption.selected = 'true';
+
+  var valueSelected = timeoutOption.value;
+  var timeinOptions = userPropertyTimein.options;
+
+  for (var i = 0; i < timeinOptions.length; i++) {
+    if (timeinOptions[i].value === valueSelected) {
+      timeinOptions[i].selected = 'true';
+    }
+  }
+});
 
 
 var setElementDisabled = function (array) {
@@ -76,7 +97,8 @@ var onPinMainClick = function () {
   userDialog.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   setElementEnabled(adFormFieldset);
-  };
+};
+
 
 var similarProperties = [];
 
