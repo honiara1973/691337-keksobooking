@@ -19,7 +19,36 @@ var mapPinMain = userDialog.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var adFormFieldset = adForm.querySelectorAll('fieldset');
 var elementClassDisabled = 'ad-form__element--disabled';
-var elementAddress = adForm.querySelector('#address');
+var userPropertyAddress = adForm.querySelector('#address');
+var userPropertyType = adForm.querySelector('#type');
+var userPropertyPrice = adForm.querySelector('#price');
+var userPropertyTimein = adForm.querySelector('#timein');
+var userPropertyTimeout = adForm.querySelector('#timeout');
+
+
+userPropertyType.addEventListener('change', function (evt) {
+  var option = evt.target;
+  option.selected = 'true';
+  
+  switch (option.value) {
+    case 'flat': userPropertyPrice.placeholder = '1000'; userPropertyPrice.min = '1000';
+    break;
+    case 'bungalo': userPropertyPrice.placeholder = '0'; userPropertyPrice.min = '0';
+    break;
+    case 'house': userPropertyPrice.placeholder = '5000'; userPropertyPrice.min = '5000';
+    break;
+    case 'palace': userPropertyPrice.placeholder = '10000'; userPropertyPrice.min = '10000';
+    break;
+  }
+});
+
+userPropertyTimein.addEventListener('change', function (evt) {
+  var option = evt.target;
+  option.selected = 'true';
+  console.log(option.value);
+ // console.log(option.index); - не работает чего-то
+ });
+
 
 var setElementDisabled = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -40,14 +69,14 @@ var setElementEnabled = function (array) {
 };
 
 var setPinMainAddress = function () {
-  elementAddress.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
+  userPropertyAddress.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
 };
 
 var onPinMainClick = function () {
   userDialog.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   setElementEnabled(adFormFieldset);
-};
+  };
 
 var similarProperties = [];
 
