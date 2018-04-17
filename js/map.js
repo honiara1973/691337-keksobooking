@@ -28,91 +28,6 @@ var userPropertyTimeout = adForm.querySelector('#timeout');
 var userPropertyRoomNumber = adForm.querySelector('#room_number');
 var userPropertyCapacity = adForm.querySelector('#capacity');
 
-userPropertyRoomNumber.addEventListener('change', function (evt) {
-  var roomOption = evt.target;
-  roomOption.selected = true;
-
-var valueSelected = roomOption.value;
-  var capacityOptions = userPropertyCapacity.options;
- 
-    
-    for (var i = 0; i < capacityOptions.length; i++) {
-       if (valueSelected <= 3 && capacityOptions[i].value === valueSelected) {
-        capacityOptions[i].selected = 'true';
-      } else if (valueSelected === '100' && capacityOptions[i].value === '0') {
-          capacityOptions[i].selected = 'true';                                          
-      }
-    }   
-  });
-
-  
-userPropertyCapacity.addEventListener('change', function (evt) {
-  var capacityOption = evt.target;
-  capacityOption.selected = true;
-  
-  var valueSelected = capacityOption.value;
-
-  for (var i = 0; i < userPropertyRoomNumber.options.length; i++) {
-    if (userPropertyRoomNumber.options[i].selected) {
-      var selectedRoomNumber = userPropertyRoomNumber.options[i].value;
-      console.log(selectedRoomNumber);
-    }
-  } 
-
-  if ((valueSelected / selectedRoomNumber) > MAX_GUESTS_PER_ROOM) {
-    console.log('Гостей до хрена');
-  }
-  
- });
-
-
-
-
-userPropertyType.addEventListener('change', function (evt) {
-  var typeOption = evt.target;
-  typeOption.selected = 'true';
-
-  switch (typeOption.value) {
-    case 'flat': userPropertyPrice.placeholder = '1000'; userPropertyPrice.min = '1000';
-      break;
-    case 'bungalo': userPropertyPrice.placeholder = '0'; userPropertyPrice.min = '0';
-      break;
-    case 'house': userPropertyPrice.placeholder = '5000'; userPropertyPrice.min = '5000';
-      break;
-    case 'palace': userPropertyPrice.placeholder = '10000'; userPropertyPrice.min = '10000';
-      break;
-  }
-});
-
-userPropertyTimein.addEventListener('change', function (evt) {
-  var timeinOption = evt.target;
-  timeinOption.selected = 'true';
-
-  var valueSelected = timeinOption.value;
-  var timeoutOptions = userPropertyTimeout.options;
-
-  for (var i = 0; i < timeoutOptions.length; i++) {
-    if (timeoutOptions[i].value === valueSelected) {
-      timeoutOptions[i].selected = 'true';
-    }
-  }
-});
-
-userPropertyTimeout.addEventListener('change', function (evt) {
-  var timeoutOption = evt.target;
-  timeoutOption.selected = 'true';
-
-  var valueSelected = timeoutOption.value;
-  var timeinOptions = userPropertyTimein.options;
-
-  for (var i = 0; i < timeinOptions.length; i++) {
-    if (timeinOptions[i].value === valueSelected) {
-      timeinOptions[i].selected = 'true';
-    }
-  }
-});
-
-
 var setElementDisabled = function (array) {
   for (var i = 0; i < array.length; i++) {
     array[i].classList.add(elementClassDisabled);
@@ -142,6 +57,88 @@ var onPinMainClick = function () {
   setElementEnabled(adFormFieldset);
 };
 
+userPropertyType.addEventListener('change', function (evt) {
+  var typeOption = evt.target;
+  typeOption.selected = 'true';
+
+  switch (typeOption.value) {
+    case 'flat': userPropertyPrice.placeholder = '1000'; userPropertyPrice.min = '1000';
+      break;
+    case 'bungalo': userPropertyPrice.placeholder = '0'; userPropertyPrice.min = '0';
+      break;
+    case 'house': userPropertyPrice.placeholder = '5000'; userPropertyPrice.min = '5000';
+      break;
+    case 'palace': userPropertyPrice.placeholder = '10000'; userPropertyPrice.min = '10000';
+      break;
+  }
+});
+
+userPropertyTimein.addEventListener('change', function (evt) {
+  var timeinOption = evt.target;
+  timeinOption.selected = 'true';
+
+  getDependedOption(timeinOption, userPropertyTimeout);
+});
+
+userPropertyTimeout.addEventListener('change', function (evt) {
+  var timeoutOption = evt.target;
+  timeoutOption.selected = 'true';
+
+  getDependedOption(timeoutOption, userPropertyTimein);
+
+});
+
+var getDependedOption = function (option, dependedArray) {
+
+  var valueSelected = option.value;
+
+  for (var i = 0; i < dependedArray.options.length; i++) {
+    if (dependedArray.options[i].value === valueSelected) {
+      dependedArray.options[i].selected = 'true';
+    }
+  }
+};
+
+userPropertyRoomNumber.addEventListener('change', function (evt) {
+  var roomOption = evt.target;
+  roomOption.selected = true;
+
+  var valueSelected = roomOption.value;
+  var capacityOptions = userPropertyCapacity.options;
+
+
+  for (var i = 0; i < capacityOptions.length; i++) {
+    if (valueSelected <= 3 && capacityOptions[i].value === valueSelected) {
+      capacityOptions[i].selected = 'true';
+    } else if (valueSelected === '100' && capacityOptions[i].value === '0') {
+      capacityOptions[i].selected = 'true';
+    }
+  }
+});
+
+userPropertyCapacity.addEventListener('change', function (evt) {
+  var capacityOption = evt.target;
+  capacityOption.selected = true;
+
+  var valueSelected = capacityOption.value;
+  var roomNumberOptions = userPropertyRoomNumber.options;
+
+  for (var i = 0; i < roomNumberOptions.length; i++) {
+    if (roomNumberOptions[i].selected) {
+      var selectedRoomNumber = roomNumberOptions[i].value;
+
+    }
+    if ((valueSelected / selectedRoomNumber) > MAX_GUESTS_PER_ROOM) {
+      capacityOption.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
+      + (valueSelected / MAX_GUESTS_PER_ROOM) + '.');
+    } else if (valueSelected === '0' && selectedRoomNumber !== '100') {
+      capacityOption.setCustomValidity('Пожалуйста, выберите вариант: 100 комнат');
+    } else {
+      capacityOption.setCustomValidity('');
+    }
+
+  }
+});
 
 var similarProperties = [];
 
