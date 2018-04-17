@@ -1,6 +1,7 @@
 'use strict';
 
 var PROPERTIES_AMOUNT = 8;
+var MAX_GUESTS_PER_ROOM = 1;
 var HOTEL_TITLE = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
   'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var HOTEL_TYPE = [['palace', 'Дворец'], ['flat', 'Квартира'], ['house', 'Дом'], ['bungalo', 'Бунгало']];
@@ -24,6 +25,47 @@ var userPropertyType = adForm.querySelector('#type');
 var userPropertyPrice = adForm.querySelector('#price');
 var userPropertyTimein = adForm.querySelector('#timein');
 var userPropertyTimeout = adForm.querySelector('#timeout');
+var userPropertyRoomNumber = adForm.querySelector('#room_number');
+var userPropertyCapacity = adForm.querySelector('#capacity');
+
+userPropertyRoomNumber.addEventListener('change', function (evt) {
+  var roomOption = evt.target;
+  roomOption.selected = true;
+
+var valueSelected = roomOption.value;
+  var capacityOptions = userPropertyCapacity.options;
+ 
+    
+    for (var i = 0; i < capacityOptions.length; i++) {
+       if (valueSelected <= 3 && capacityOptions[i].value === valueSelected) {
+        capacityOptions[i].selected = 'true';
+      } else if (valueSelected === '100' && capacityOptions[i].value === '0') {
+          capacityOptions[i].selected = 'true';                                          
+      }
+    }   
+  });
+
+  
+userPropertyCapacity.addEventListener('change', function (evt) {
+  var capacityOption = evt.target;
+  capacityOption.selected = true;
+  
+  var valueSelected = capacityOption.value;
+
+  for (var i = 0; i < userPropertyRoomNumber.options.length; i++) {
+    if (userPropertyRoomNumber.options[i].selected) {
+      var selectedRoomNumber = userPropertyRoomNumber.options[i].value;
+      console.log(selectedRoomNumber);
+    }
+  } 
+
+  if ((valueSelected / selectedRoomNumber) > MAX_GUESTS_PER_ROOM) {
+    console.log('Гостей до хрена');
+  }
+  
+ });
+
+
 
 
 userPropertyType.addEventListener('change', function (evt) {
@@ -90,6 +132,7 @@ var setElementEnabled = function (array) {
 };
 
 var setPinMainAddress = function () {
+  userPropertyAddress.disabled = true;
   userPropertyAddress.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
 };
 
