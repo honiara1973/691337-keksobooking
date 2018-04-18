@@ -61,12 +61,11 @@ var onPinMainClick = function () {
 userPropertyType.addEventListener('change', function (evt) {
   var typeOption = evt.target;
   typeOption.selected = 'true';
-  console.log(typeOption.value);
 
   userPropertyPrice.placeholder = userPropertyMinPrice[typeOption.value];
   userPropertyPrice.min = userPropertyMinPrice[typeOption.value];
 
-  });
+});
 
 userPropertyTimein.addEventListener('change', function (evt) {
   var timeinOption = evt.target;
@@ -90,21 +89,28 @@ var getDependentOption = function (option, dependentArray) {
   for (var i = 0; i < dependentArray.options.length; i++) {
     if (dependentArray.options[i].value === valueSelected) {
       dependentArray.options[i].selected = 'true';
-    } 
+    }
   }
 };
+
+/*var getDifferentValue = function (n, selectArray) {
+  selectArray.querySelector('option[value=\'n\']');
+};
+*/
 
 userPropertyRoomNumber.addEventListener('change', function (evt) {
   var roomOption = evt.target;
   roomOption.selected = true;
-  var differentValue = userPropertyCapacity.querySelector('option[value=\'0\']');
-    
- getDependentOption(roomOption, userPropertyCapacity);
 
- if (roomOption.value === '100') {
-  differentValue.selected = 'true';
- }
- 
+  // var differentValue = getDifferentValue(0, userPropertyCapacity);
+  var differentValue = userPropertyCapacity.querySelector('option[value=\'0\']');
+
+  getDependentOption(roomOption, userPropertyCapacity);
+
+  if (roomOption.value === '100') {
+    differentValue.selected = 'true';
+  }
+
 });
 
 userPropertyCapacity.addEventListener('change', function (evt) {
@@ -114,26 +120,27 @@ userPropertyCapacity.addEventListener('change', function (evt) {
 
   var valueSelected = capacityOption.value;
   var roomNumberOptions = userPropertyRoomNumber.options;
-  
+
   if (capacityOption.value === '0') {
     differentValue.selected = 'true';
-   }
+  }
 
   for (var i = 0; i < roomNumberOptions.length; i++) {
     if (roomNumberOptions[i].selected) {
       var selectedRoomNumber = roomNumberOptions[i].value;
-
     }
-    if ((valueSelected / selectedRoomNumber) > MAX_GUESTS_PER_ROOM) {
-      capacityOption.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
+  }
+
+  if ((valueSelected / selectedRoomNumber) > MAX_GUESTS_PER_ROOM) {
+    capacityOption.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
       + (valueSelected / MAX_GUESTS_PER_ROOM) + '.');
-    
-    } else if (valueSelected === '0' && selectedRoomNumber !== '100') {
-      capacityOption.setCustomValidity('Пожалуйста, выберите вариант: 100 комнат');
-    } else {
-      capacityOption.setCustomValidity('');
-    }
 
+  } else if (valueSelected === '0' && selectedRoomNumber !== '100') {
+    capacityOption.setCustomValidity('Вам подходит вариант: 100 комнат. Кол-во комнат было изменено.');
+  } else if (valueSelected !== '0' && selectedRoomNumber === '100') {
+    capacityOption.setCustomValidity('100 комнат - не для гостей');
+  } else {
+    capacityOption.setCustomValidity('');
   }
 });
 
