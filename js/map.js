@@ -14,6 +14,8 @@ var HOTEL_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http:
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var AVATAR_NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08'];
 var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
+var guestsForRooms = {1: [1], 2: [1, 2], 3: [1, 2, 3], 100: [0]};
+
 
 var userDialog = document.querySelector('.map');
 var mapPinMain = userDialog.querySelector('.map__pin--main');
@@ -93,16 +95,17 @@ var getDependentOption = function (option, dependentArray) {
   }
 };
 
-/*var getDifferentValue = function (n, selectArray) {
-  selectArray.querySelector('option[value=\'n\']');
+var obj = {
+  rooms: 0,
+  capacity: 0
 };
-*/
 
 userPropertyRoomNumber.addEventListener('change', function (evt) {
   var roomOption = evt.target;
   roomOption.selected = true;
+  obj.rooms = roomOption.value;
+  console.log(obj.rooms);
 
-  // var differentValue = getDifferentValue(0, userPropertyCapacity);
   var differentValue = userPropertyCapacity.querySelector('option[value=\'0\']');
 
   getDependentOption(roomOption, userPropertyCapacity);
@@ -119,25 +122,21 @@ userPropertyCapacity.addEventListener('change', function (evt) {
   var differentValue = userPropertyRoomNumber.querySelector('option[value=\'100\']');
 
   var valueSelected = capacityOption.value;
-  var roomNumberOptions = userPropertyRoomNumber.options;
+
+  obj.capacity = capacityOption.value;
+  console.log(obj.capacity);
 
   if (capacityOption.value === '0') {
     differentValue.selected = 'true';
   }
 
-  for (var i = 0; i < roomNumberOptions.length; i++) {
-    if (roomNumberOptions[i].selected) {
-      var selectedRoomNumber = roomNumberOptions[i].value;
-    }
-  }
-
-  if ((valueSelected / selectedRoomNumber) > MAX_GUESTS_PER_ROOM) {
+  if ((valueSelected / obj.rooms) > MAX_GUESTS_PER_ROOM) {
     capacityOption.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
       + (valueSelected / MAX_GUESTS_PER_ROOM) + '.');
 
-  } else if (valueSelected === '0' && selectedRoomNumber !== '100') {
+  } else if (valueSelected === '0' && obj.rooms !== '100') {
     capacityOption.setCustomValidity('Вам подходит вариант: 100 комнат. Кол-во комнат было изменено.');
-  } else if (valueSelected !== '0' && selectedRoomNumber === '100') {
+  } else if (valueSelected !== '0' && obj.rooms === '100') {
     capacityOption.setCustomValidity('100 комнат - не для гостей');
   } else {
     capacityOption.setCustomValidity('');
