@@ -13,6 +13,7 @@ var HOTEL_CHECKOUT_TIME = ['12:00', '13:00', '14:00'];
 var HOTEL_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var AVATAR_NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08'];
+var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
 
 var userDialog = document.querySelector('.map');
 var mapPinMain = userDialog.querySelector('.map__pin--main');
@@ -60,68 +61,63 @@ var onPinMainClick = function () {
 userPropertyType.addEventListener('change', function (evt) {
   var typeOption = evt.target;
   typeOption.selected = 'true';
+  console.log(typeOption.value);
 
-  switch (typeOption.value) {
-    case 'flat': userPropertyPrice.placeholder = '1000'; userPropertyPrice.min = '1000';
-      break;
-    case 'bungalo': userPropertyPrice.placeholder = '0'; userPropertyPrice.min = '0';
-      break;
-    case 'house': userPropertyPrice.placeholder = '5000'; userPropertyPrice.min = '5000';
-      break;
-    case 'palace': userPropertyPrice.placeholder = '10000'; userPropertyPrice.min = '10000';
-      break;
-  }
-});
+  userPropertyPrice.placeholder = userPropertyMinPrice[typeOption.value];
+  userPropertyPrice.min = userPropertyMinPrice[typeOption.value];
+
+  });
 
 userPropertyTimein.addEventListener('change', function (evt) {
   var timeinOption = evt.target;
   timeinOption.selected = 'true';
 
-  getDependedOption(timeinOption, userPropertyTimeout);
+  getDependentOption(timeinOption, userPropertyTimeout);
 });
 
 userPropertyTimeout.addEventListener('change', function (evt) {
   var timeoutOption = evt.target;
   timeoutOption.selected = 'true';
 
-  getDependedOption(timeoutOption, userPropertyTimein);
+  getDependentOption(timeoutOption, userPropertyTimein);
 
 });
 
-var getDependedOption = function (option, dependedArray) {
+var getDependentOption = function (option, dependentArray) {
 
   var valueSelected = option.value;
 
-  for (var i = 0; i < dependedArray.options.length; i++) {
-    if (dependedArray.options[i].value === valueSelected) {
-      dependedArray.options[i].selected = 'true';
-    }
+  for (var i = 0; i < dependentArray.options.length; i++) {
+    if (dependentArray.options[i].value === valueSelected) {
+      dependentArray.options[i].selected = 'true';
+    } 
   }
 };
 
 userPropertyRoomNumber.addEventListener('change', function (evt) {
   var roomOption = evt.target;
   roomOption.selected = true;
+  var differentValue = userPropertyCapacity.querySelector('option[value=\'0\']');
+    
+ getDependentOption(roomOption, userPropertyCapacity);
 
-  var valueSelected = roomOption.value;
-  var capacityOptions = userPropertyCapacity.options;
-
-
-  for (var i = 0; i < capacityOptions.length; i++) {
-    if (valueSelected <= 3 && capacityOptions[i].value === valueSelected) {
-      capacityOptions[i].selected = 'true';
-    } else if (valueSelected === '100' && capacityOptions[i].value === '0') {
-      capacityOptions[i].selected = 'true';
-    }
-  }
+ if (roomOption.value === '100') {
+  differentValue.selected = 'true';
+ }
+ 
 });
 
 userPropertyCapacity.addEventListener('change', function (evt) {
   var capacityOption = evt.target;
   capacityOption.selected = true;
+  var differentValue = userPropertyRoomNumber.querySelector('option[value=\'100\']');
 
   var valueSelected = capacityOption.value;
   var roomNumberOptions = userPropertyRoomNumber.options;
+  
+  if (capacityOption.value === '0') {
+    differentValue.selected = 'true';
+   }
 
   for (var i = 0; i < roomNumberOptions.length; i++) {
     if (roomNumberOptions[i].selected) {
@@ -131,6 +127,7 @@ userPropertyCapacity.addEventListener('change', function (evt) {
     if ((valueSelected / selectedRoomNumber) > MAX_GUESTS_PER_ROOM) {
       capacityOption.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
       + (valueSelected / MAX_GUESTS_PER_ROOM) + '.');
+    
     } else if (valueSelected === '0' && selectedRoomNumber !== '100') {
       capacityOption.setCustomValidity('Пожалуйста, выберите вариант: 100 комнат');
     } else {
