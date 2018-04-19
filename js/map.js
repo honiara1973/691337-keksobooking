@@ -95,7 +95,7 @@ var getDependentOption = function (option, dependentArray) {
   }
 };
 
-var obj = {
+var roomsCapacityValue = {
   rooms: 0,
   capacity: 0
 };
@@ -103,45 +103,46 @@ var obj = {
 userPropertyRoomNumber.addEventListener('change', function (evt) {
   var roomOption = evt.target;
   roomOption.selected = true;
-  obj.rooms = roomOption.value;
-  console.log(obj.rooms);
+  roomsCapacityValue.rooms = roomOption.value;
 
   var differentValue = userPropertyCapacity.querySelector('option[value=\'0\']');
-
+  
   getDependentOption(roomOption, userPropertyCapacity);
 
   if (roomOption.value === '100') {
     differentValue.selected = 'true';
   }
+  
+  setValidities(userPropertyCapacity);
 
-});
+ });
 
 userPropertyCapacity.addEventListener('change', function (evt) {
   var capacityOption = evt.target;
   capacityOption.selected = true;
   var differentValue = userPropertyRoomNumber.querySelector('option[value=\'100\']');
 
-  var valueSelected = capacityOption.value;
-
-  obj.capacity = capacityOption.value;
-  console.log(obj.capacity);
-
-  if (capacityOption.value === '0') {
-    differentValue.selected = 'true';
-  }
-
-  if ((valueSelected / obj.rooms) > MAX_GUESTS_PER_ROOM) {
-    capacityOption.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
-      + (valueSelected / MAX_GUESTS_PER_ROOM) + '.');
-
-  } else if (valueSelected === '0' && obj.rooms !== '100') {
-    capacityOption.setCustomValidity('Вам подходит вариант: 100 комнат. Кол-во комнат было изменено.');
-  } else if (valueSelected !== '0' && obj.rooms === '100') {
-    capacityOption.setCustomValidity('100 комнат - не для гостей');
-  } else {
-    capacityOption.setCustomValidity('');
-  }
+  roomsCapacityValue.capacity = capacityOption.value;
+  
+  setValidities(userPropertyCapacity);
+ 
 });
+
+var setValidities = function (option) {
+
+if ((roomsCapacityValue.capacity / roomsCapacityValue.rooms) > MAX_GUESTS_PER_ROOM) {
+  option.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
+    + (roomsCapacityValue.capacity / MAX_GUESTS_PER_ROOM) + '.');
+
+} else if (roomsCapacityValue.capacity === '0' && roomsCapacityValue.rooms !== '100') {
+  option.setCustomValidity('Выберите вариант: 100 комнат.');
+} else if (roomsCapacityValue.capacity !== '0' && roomsCapacityValue.rooms === '100') {
+  option.setCustomValidity('100 комнат - не для гостей');
+} else {
+  option.setCustomValidity('');
+}
+
+};
 
 var similarProperties = [];
 
