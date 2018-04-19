@@ -14,8 +14,6 @@ var HOTEL_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http:
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var AVATAR_NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08'];
 var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
-var guestsForRooms = {1: [1], 2: [1, 2], 3: [1, 2, 3], 100: [0]};
-
 
 var userDialog = document.querySelector('.map');
 var mapPinMain = userDialog.querySelector('.map__pin--main');
@@ -96,8 +94,8 @@ var getDependentOption = function (option, dependentArray) {
 };
 
 var roomsCapacityValue = {
-  rooms: 0,
-  capacity: 0
+  rooms: 1,
+  capacity: 1
 };
 
 userPropertyRoomNumber.addEventListener('change', function (evt) {
@@ -106,41 +104,39 @@ userPropertyRoomNumber.addEventListener('change', function (evt) {
   roomsCapacityValue.rooms = roomOption.value;
 
   var differentValue = userPropertyCapacity.querySelector('option[value=\'0\']');
-  
+
   getDependentOption(roomOption, userPropertyCapacity);
 
   if (roomOption.value === '100') {
     differentValue.selected = 'true';
   }
-  
-  setValidities(userPropertyCapacity);
 
- });
+  setGuestsValidity(userPropertyCapacity);
+
+});
 
 userPropertyCapacity.addEventListener('change', function (evt) {
   var capacityOption = evt.target;
   capacityOption.selected = true;
-  var differentValue = userPropertyRoomNumber.querySelector('option[value=\'100\']');
-
   roomsCapacityValue.capacity = capacityOption.value;
-  
-  setValidities(userPropertyCapacity);
- 
+
+  setGuestsValidity(userPropertyCapacity);
+
 });
 
-var setValidities = function (option) {
+var setGuestsValidity = function (field) {
 
-if ((roomsCapacityValue.capacity / roomsCapacityValue.rooms) > MAX_GUESTS_PER_ROOM) {
-  option.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
+  if ((roomsCapacityValue.capacity / roomsCapacityValue.rooms) > MAX_GUESTS_PER_ROOM) {
+    field.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
     + (roomsCapacityValue.capacity / MAX_GUESTS_PER_ROOM) + '.');
 
-} else if (roomsCapacityValue.capacity === '0' && roomsCapacityValue.rooms !== '100') {
-  option.setCustomValidity('Выберите вариант: 100 комнат.');
-} else if (roomsCapacityValue.capacity !== '0' && roomsCapacityValue.rooms === '100') {
-  option.setCustomValidity('100 комнат - не для гостей');
-} else {
-  option.setCustomValidity('');
-}
+  } else if (roomsCapacityValue.capacity === '0' && roomsCapacityValue.rooms !== '100') {
+    field.setCustomValidity('Выберите вариант: 100 комнат.');
+  } else if (roomsCapacityValue.capacity !== '0' && roomsCapacityValue.rooms === '100') {
+    field.setCustomValidity('100 комнат - не для гостей');
+  } else {
+    field.setCustomValidity('');
+  }
 
 };
 
