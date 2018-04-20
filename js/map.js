@@ -63,15 +63,10 @@ var moveLimits = {
   left: userDialog.offsetLeft + 'px',
   bottom: userDialog.offsetTop + 500 + 'px',
   right: userDialog.offsetLeft + userDialog.offsetWidth + 'px'
-}
-
-console.log(moveLimits.left);
-
-var pinMainWidth = mapPinMain.style.width;   //строка 224 css
-console.log(pinMainWidth);
+};
 
 mapPinMain.addEventListener('mousedown', function (evt) {
-  
+
   var startCoords = {
     x: evt.clientX,
     y: evt.clientY
@@ -90,30 +85,21 @@ mapPinMain.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
-        
+
     mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
     if (mapPinMain.style.top > moveLimits.bottom) {
       mapPinMain.style.top = moveLimits.bottom;
     } else if (mapPinMain.style.top < moveLimits.top) {
       mapPinMain.style.top = moveLimits.top;
-    } 
+    }
 
     mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
     if (mapPinMain.style.left > moveLimits.right) {
-     // console.log('Out of limits');
       mapPinMain.style.left = moveLimits.right;
     } else if (mapPinMain.style.left < moveLimits.left) {
-      console.log('Left out of limits');                         //с шириной проблема, видимо не width элемента надо.
       mapPinMain.style.left = moveLimits.left;
     }
 
-
-    /*(data.location.x - pinWidth / 2) + 'px';
-    pinElement.style.top = (data.location.y - pinHeight) + 'px';
-*/
-    
-    //console.log(moveLimits.bottom);
-    //console.log(mapPinMain.style.top);
     setPinMainAddress();
   };
 
@@ -122,25 +108,15 @@ mapPinMain.addEventListener('mousedown', function (evt) {
     onPinMainClick();
     setPinMainAddress();
     createSimilarPropertiesPins();
-    
+
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-  
-}); 
 
-
-
-/*mapPinMain.addEventListener('mouseup', function () {
-  onPinMainClick();
-  setPinMainAddress();
-  createSimilarPropertiesPins();
 });
-*/
-
 
 userPropertyType.addEventListener('change', function (evt) {
   var typeOption = evt.target;
