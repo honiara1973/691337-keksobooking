@@ -1,5 +1,9 @@
 'use strict';
 
+var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_HEIGHT = 85;
+var MOVE_LIMIT_TOP = 150;
+var MOVE_LIMIT_BOTTOM = 500;
 var PROPERTIES_AMOUNT = 8;
 var MAX_GUESTS_PER_ROOM = 1;
 var HOTEL_TITLE = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
@@ -47,22 +51,25 @@ var setElementEnabled = function (array) {
   return array;
 };
 
-var setPinMainAddress = function () {
-  userPropertyAddress.disabled = true;
-  userPropertyAddress.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
-};
-
 var onPinMainClick = function () {
   userDialog.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   setElementEnabled(adFormFieldset);
 };
 
+var pinMainPosLeft = mapPinMain.offsetLeft;
+var pinMainPosTop = mapPinMain.offsetTop;
+
 var moveLimits = {
-  top: userDialog.offsetTop + 150 + 'px',
-  left: userDialog.offsetLeft + 'px',
-  bottom: userDialog.offsetTop + 500 + 'px',
-  right: userDialog.offsetLeft + userDialog.offsetWidth + 'px'
+  top: userDialog.offsetTop - PIN_MAIN_HEIGHT + MOVE_LIMIT_TOP,
+  left: userDialog.offsetLeft - PIN_MAIN_WIDTH / 2,
+  bottom: userDialog.offsetTop - PIN_MAIN_HEIGHT + MOVE_LIMIT_BOTTOM,
+  right: userDialog.offsetLeft - PIN_MAIN_WIDTH + userDialog.offsetWidth
+};
+
+var setPinMainAddress = function (left, top, width, height) {
+  userPropertyAddress.disabled = true;
+  userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
 };
 
 mapPinMain.addEventListener('mousedown', function (evt) {
@@ -85,28 +92,32 @@ mapPinMain.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
+    pinMainPosLeft = mapPinMain.offsetLeft - shift.x;
+    pinMainPosTop = mapPinMain.offsetTop - shift.y;
 
-    mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
-    if (mapPinMain.style.top > moveLimits.bottom) {
-      mapPinMain.style.top = moveLimits.bottom;
-    } else if (mapPinMain.style.top < moveLimits.top) {
-      mapPinMain.style.top = moveLimits.top;
+    mapPinMain.style.left = pinMainPosLeft + 'px';
+
+    if (pinMainPosLeft > moveLimits.right) {
+      mapPinMain.style.left = moveLimits.right + 'px';
+    } else if (pinMainPosLeft < moveLimits.left) {
+      mapPinMain.style.left = moveLimits.left + 'px';
     }
 
-    mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
-    if (mapPinMain.style.left > moveLimits.right) {
-      mapPinMain.style.left = moveLimits.right;
-    } else if (mapPinMain.style.left < moveLimits.left) {
-      mapPinMain.style.left = moveLimits.left;
+    mapPinMain.style.top = pinMainPosTop + 'px';
+
+    if (pinMainPosTop > moveLimits.bottom) {
+      mapPinMain.style.top = moveLimits.bottom + 'px';
+    } else if (pinMainPosTop < moveLimits.top) {
+      mapPinMain.style.top = moveLimits.top + 'px';
     }
 
-    setPinMainAddress();
+    setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
   };
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
     onPinMainClick();
-    setPinMainAddress();
+    setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
     createSimilarPropertiesPins();
 
     document.removeEventListener('mousemove', onMouseMove);
