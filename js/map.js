@@ -1,5 +1,9 @@
 'use strict';
 
+var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_HEIGHT = 85;
+var MOVE_LIMIT_TOP = 150;
+var MOVE_LIMIT_BOTTOM = 500;
 var PROPERTIES_AMOUNT = 8;
 var MAX_GUESTS_PER_ROOM = 1;
 var HOTEL_TITLE = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
@@ -47,16 +51,83 @@ var setElementEnabled = function (array) {
   return array;
 };
 
-var setPinMainAddress = function () {
-  userPropertyAddress.disabled = true;
-  userPropertyAddress.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
-};
-
 var onPinMainClick = function () {
   userDialog.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   setElementEnabled(adFormFieldset);
 };
+
+var pinMainPosLeft = mapPinMain.offsetLeft;
+var pinMainPosTop = mapPinMain.offsetTop;
+
+var moveLimits = {
+  top: userDialog.offsetTop - PIN_MAIN_HEIGHT + MOVE_LIMIT_TOP,
+  left: userDialog.offsetLeft - PIN_MAIN_WIDTH / 2,
+  bottom: userDialog.offsetTop - PIN_MAIN_HEIGHT + MOVE_LIMIT_BOTTOM,
+  right: userDialog.offsetLeft - PIN_MAIN_WIDTH + userDialog.offsetWidth
+};
+
+var setPinMainAddress = function (left, top, width, height) {
+  userPropertyAddress.disabled = true;
+  userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
+};
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    pinMainPosLeft = mapPinMain.offsetLeft - shift.x;
+    pinMainPosTop = mapPinMain.offsetTop - shift.y;
+
+    mapPinMain.style.left = pinMainPosLeft + 'px';
+
+    if (pinMainPosLeft > moveLimits.right) {
+      mapPinMain.style.left = moveLimits.right + 'px';
+    } else if (pinMainPosLeft < moveLimits.left) {
+      mapPinMain.style.left = moveLimits.left + 'px';
+    }
+
+    mapPinMain.style.top = pinMainPosTop + 'px';
+
+    if (pinMainPosTop > moveLimits.bottom) {
+      mapPinMain.style.top = moveLimits.bottom + 'px';
+    } else if (pinMainPosTop < moveLimits.top) {
+      mapPinMain.style.top = moveLimits.top + 'px';
+    }
+
+    setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    onPinMainClick();
+    setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+    createSimilarPropertiesPins();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+
+});
 
 userPropertyType.addEventListener('change', function (evt) {
   var typeOption = evt.target;
@@ -205,12 +276,6 @@ var renderPinElement = function (data) {
 
   return pinElement;
 };
-
-mapPinMain.addEventListener('mouseup', function () {
-  onPinMainClick();
-  setPinMainAddress();
-  createSimilarPropertiesPins();
-});
 
 var renderCardElement = function (data) {
   var mapCardElement = mapCardTemplate.cloneNode(true);
