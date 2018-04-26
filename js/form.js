@@ -8,7 +8,7 @@
   var adForm = document.querySelector('.ad-form');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
   var adFormReset = adForm.querySelector('.ad-form__reset');
-  var successMessage = document.querySelector('.success');
+  // var successMessage = document.querySelector('.success');
   var elementClassDisabled = 'ad-form__element--disabled';
   var userPropertyAddress = adForm.querySelector('#address');
   var userPropertyType = adForm.querySelector('#type');
@@ -17,19 +17,25 @@
   var userPropertyTimeout = adForm.querySelector('#timeout');
   var userPropertyRoomNumber = adForm.querySelector('#room_number');
   var userPropertyCapacity = adForm.querySelector('#capacity');
-  
 
   var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
+
 
   window.formData = {
     adForm: adForm,
     adFormFieldset: adFormFieldset,
     elementClassDisabled: elementClassDisabled,
-    userPropertyAddress: userPropertyAddress
+    // userPropertyAddress: userPropertyAddress
+    setPinMainAddress: function (left, top, width, height) {
+      // userPropertyAddress.disabled = true;
+      userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
+    }
   };
 
 
   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
+
+  userPropertyAddress.disabled = true;
 
   userPropertyType.addEventListener('change', function (evt) {
     var typeOption = evt.target;
@@ -113,18 +119,13 @@
 
   };
 
-  adFormReset.addEventListener('click', function () {       //пины не убрались, метка на место не вернулась
+  adFormReset.addEventListener('click', function () { // пины не убрались, метка на место не вернулась
     window.mapData.userDialog.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
-  window.mapData.mapPinMain.style.left = window.mapData.mapPinCoords.x + 'px';
-  window.mapData.mapPinMain.style.top = window.mapData.mapPinCoords.y + 'px';
-   //console.log(window.mapData.mapPinMain.offsetLeft);
-   //console.log(window.mapData.mapPinMain.style.left);
-   
-   //window.mapData.mapPinMain.style.top = window.mapData.mapPinMain.offsetTop + 'px';
-   });
-  
+    window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
+    window.mapData.restoreOriginalState();
+
+  });
 
 
   var errorHandler = function (errorMessage) {
@@ -142,14 +143,14 @@
   };
 
   adForm.addEventListener('submit', function (evt) {
-   evt.preventDefault();
-   window.backend.save(new FormData(adForm), function () {
-     console.log('Данные отправлены');
-    //window.mapData.userDialog.classList.add('map--faded');
-    //adForm.classList.add('ad-form--disabled');
-   // window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
-   // successMessage.classList.remove('hidden');
-   }, errorHandler);
+    evt.preventDefault();
+    window.backend.save(new FormData(adForm), function () {
+      console.log('Данные отправлены');
+    // window.mapData.userDialog.classList.add('map--faded');
+    // adForm.classList.add('ad-form--disabled');
+      // window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
+      // successMessage.classList.remove('hidden');
+    }, errorHandler);
 
   });
 

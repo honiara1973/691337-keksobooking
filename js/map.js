@@ -15,14 +15,7 @@
   var pinMainPosLeft = mapPinMain.offsetLeft;
   var pinMainPosTop = mapPinMain.offsetTop;
 
-  window.mapData = {
-    userDialog: userDialog,
-    mapFilters: mapFilters,
-    mapPinMain: mapPinMain,
-    mapPinCoords: PIN_MAIN_START_COORDS 
-  };
 
- 
   var onPinMainClick = function () {
     userDialog.classList.remove('map--faded');
     window.formData.adForm.classList.remove('ad-form--disabled');
@@ -34,11 +27,6 @@
     left: userDialog.offsetLeft - PIN_MAIN_WIDTH / 2,
     bottom: userDialog.offsetTop - PIN_MAIN_HEIGHT + MOVE_LIMIT_BOTTOM,
     right: userDialog.offsetLeft - PIN_MAIN_WIDTH + userDialog.offsetWidth
-  };
-
-  var setPinMainAddress = function (left, top, width, height) {
-    window.formData.userPropertyAddress.disabled = true;
-    window.formData.userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
   };
 
   mapPinMain.addEventListener('mousedown', function (evt) {
@@ -71,17 +59,16 @@
       pinMainPosTop = Math.max(pinMainPosTop, moveLimits.top);
       pinMainPosTop = Math.min(pinMainPosTop, moveLimits.bottom);
       mapPinMain.style.top = pinMainPosTop + 'px';
-      
-     
-      setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+
+
+      window.formData.setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       onPinMainClick();
-      setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+      window.formData.setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
       window.backend.load(loadHandler, errorHandler);
-      //createSimilarPropertiesPins();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
@@ -116,20 +103,24 @@
 
   };
 
+  window.mapData = {
+    userDialog: userDialog,
+    mapFilters: mapFilters,
+    mapPinMain: mapPinMain,
 
+    restoreOriginalState: function () {
+      pinMainPosLeft = PIN_MAIN_START_COORDS.x;
+      pinMainPosTop = PIN_MAIN_START_COORDS.y;
+      mapPinMain.style.left = pinMainPosLeft + 'px';
+      mapPinMain.style.top = pinMainPosTop + 'px';
 
+      var pins = mapPinsList.querySelectorAll('.map__pin');
+      for (var i = 1; i < pins.length; i++) {
+        mapPinsList.removeChild(pins[i]);
+      }
 
- // window.backend.load(loadHandler, errorHandler);
-
-  /*var createSimilarPropertiesPins = function () {
-    var fragmentPinElement = document.createDocumentFragment();
-
-    for (var i = 0; i < window.similarProperties.length; i++) {
-      fragmentPinElement.appendChild(window.renderPinElement(window.similarProperties[i]));
     }
-    mapPinsList.appendChild(fragmentPinElement);
-    return mapPinsList;
   };
-  */
+
 
 })();
