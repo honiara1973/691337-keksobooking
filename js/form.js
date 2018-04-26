@@ -7,6 +7,8 @@
 
   var adForm = document.querySelector('.ad-form');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
+  var adFormReset = adForm.querySelector('.ad-form__reset');
+  var successMessage = document.querySelector('.success');
   var elementClassDisabled = 'ad-form__element--disabled';
   var userPropertyAddress = adForm.querySelector('#address');
   var userPropertyType = adForm.querySelector('#type');
@@ -15,6 +17,7 @@
   var userPropertyTimeout = adForm.querySelector('#timeout');
   var userPropertyRoomNumber = adForm.querySelector('#room_number');
   var userPropertyCapacity = adForm.querySelector('#capacity');
+  
 
   var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
 
@@ -109,5 +112,46 @@
     }
 
   };
+
+  adFormReset.addEventListener('click', function () {       //пины не убрались, метка на место не вернулась
+    window.mapData.userDialog.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
+  window.mapData.mapPinMain.style.left = window.mapData.mapPinCoords.x + 'px';
+  window.mapData.mapPinMain.style.top = window.mapData.mapPinCoords.y + 'px';
+   //console.log(window.mapData.mapPinMain.offsetLeft);
+   //console.log(window.mapData.mapPinMain.style.left);
+   
+   //window.mapData.mapPinMain.style.top = window.mapData.mapPinMain.offsetTop + 'px';
+   });
+  
+
+
+  var errorHandler = function (errorMessage) {
+    var errorElement = document.createElement('div');
+
+    errorElement.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: orange;';
+    errorElement.style.position = 'fixed';
+    errorElement.style.left = 0;
+    errorElement.style.right = 0;
+    errorElement.style.fontSize = '30px';
+
+    errorElement.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', errorElement);
+
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+   evt.preventDefault();
+   window.backend.save(new FormData(adForm), function () {
+     console.log('Данные отправлены');
+    //window.mapData.userDialog.classList.add('map--faded');
+    //adForm.classList.add('ad-form--disabled');
+   // window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
+   // successMessage.classList.remove('hidden');
+   }, errorHandler);
+
+  });
+
 
 })();

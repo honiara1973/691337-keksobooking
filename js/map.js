@@ -4,6 +4,7 @@
 
   var PIN_MAIN_WIDTH = 65;
   var PIN_MAIN_HEIGHT = 85;
+  var PIN_MAIN_START_COORDS = {x: 570, y: 375};
   var MOVE_LIMIT_TOP = 150;
   var MOVE_LIMIT_BOTTOM = 500;
 
@@ -16,9 +17,12 @@
 
   window.mapData = {
     userDialog: userDialog,
-    mapFilters: mapFilters
+    mapFilters: mapFilters,
+    mapPinMain: mapPinMain,
+    mapPinCoords: PIN_MAIN_START_COORDS 
   };
 
+ 
   var onPinMainClick = function () {
     userDialog.classList.remove('map--faded');
     window.formData.adForm.classList.remove('ad-form--disabled');
@@ -67,7 +71,8 @@
       pinMainPosTop = Math.max(pinMainPosTop, moveLimits.top);
       pinMainPosTop = Math.min(pinMainPosTop, moveLimits.bottom);
       mapPinMain.style.top = pinMainPosTop + 'px';
-
+      
+     
       setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
     };
 
@@ -75,8 +80,8 @@
       upEvt.preventDefault();
       onPinMainClick();
       setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
-      createSimilarPropertiesPins();
-
+      window.backend.load(loadHandler, errorHandler);
+      //createSimilarPropertiesPins();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
@@ -86,7 +91,37 @@
 
   });
 
-  var createSimilarPropertiesPins = function () {
+  var loadHandler = function (similarProperties) {
+    console.log('Data loaded');
+    var fragmentPinElement = document.createDocumentFragment();
+
+    for (var i = 0; i < 8; i++) {
+      fragmentPinElement.appendChild(window.renderPinElement(similarProperties[i]));
+    }
+    mapPinsList.appendChild(fragmentPinElement);
+    return mapPinsList;
+  };
+
+  var errorHandler = function (errorMessage) {
+    var errorElement = document.createElement('div');
+
+    errorElement.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: orange;';
+    errorElement.style.position = 'fixed';
+    errorElement.style.left = 0;
+    errorElement.style.right = 0;
+    errorElement.style.fontSize = '30px';
+
+    errorElement.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', errorElement);
+
+  };
+
+
+
+
+ // window.backend.load(loadHandler, errorHandler);
+
+  /*var createSimilarPropertiesPins = function () {
     var fragmentPinElement = document.createDocumentFragment();
 
     for (var i = 0; i < window.similarProperties.length; i++) {
@@ -95,5 +130,6 @@
     mapPinsList.appendChild(fragmentPinElement);
     return mapPinsList;
   };
+  */
 
 })();

@@ -29,6 +29,11 @@ window.util = (function () {
 
     compareRandom: function () {
       return Math.random() - 0.5;
+    },
+
+    elementStartCoords: function (element) {
+     element.style.left = element.offsetLeft + 'px';
+     element.style.top = element.offsetTop + 'px';
     }
 
   };
