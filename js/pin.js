@@ -12,7 +12,7 @@
     pinElement.style.top = (data.location.y - pinHeight) + 'px';
     pinElement.querySelector('img').src = data.author.avatar;
     pinElement.querySelector('img').alt = data.offer.title;
-    
+
     pinElement.addEventListener('click', function () {
 
       var fragmentCardElement = document.createDocumentFragment();

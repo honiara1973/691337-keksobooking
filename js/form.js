@@ -25,13 +25,10 @@
     adForm: adForm,
     adFormFieldset: adFormFieldset,
     elementClassDisabled: elementClassDisabled,
-    // userPropertyAddress: userPropertyAddress
     setPinMainAddress: function (left, top, width, height) {
-      // userPropertyAddress.disabled = true;
       userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
     }
   };
-
 
   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
 
@@ -119,7 +116,7 @@
 
   };
 
-  adFormReset.addEventListener('click', function () { 
+  adFormReset.addEventListener('click', function () {
     window.mapData.restoreOriginalState();
   });
 
@@ -140,12 +137,11 @@
 
   adForm.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(adForm), function () {
-      window.mapData.restoreOriginalState(); 
+      window.mapData.restoreOriginalState();
       successMessage.classList.remove('hidden');
     }, errorHandler);
     evt.preventDefault();
 
   });
-
 
 })();

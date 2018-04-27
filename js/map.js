@@ -78,7 +78,6 @@
   });
 
   var loadHandler = function (similarProperties) {
-    console.log('Data loaded');
     var fragmentPinElement = document.createDocumentFragment();
 
     for (var i = 0; i < 8; i++) {
@@ -123,6 +122,5 @@
 
     }
   };
-
 
 })();
