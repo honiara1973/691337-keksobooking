@@ -9,13 +9,35 @@
     mapCardElement.querySelector('.popup__title').textContent = data.offer.title;
     mapCardElement.querySelector('.popup__text--address').textContent = data.offer.address;
     mapCardElement.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
-    mapCardElement.querySelector('.popup__type').textContent = data.offer.type;
+    
+    var mapCardType = mapCardElement.querySelector('.popup__type');
+    mapCardType.textContent = data.offer.type;
+    
+    //translateType(data.offer.type);
+
+    var translateType = function (type) {
+      switch (type) {
+      case 'flat': 'Квартира';
+      break;
+      case 'bungalo': 'Бунгало';
+          break;
+        case 'house': 'Дом';
+          break;
+        case 'palace': 'Дворец';
+          break;
+      }
+      return type;
+    };
+
+    //mapCardElement.querySelector('.popup__type').textContent = data.offer.type;
     mapCardElement.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты'
 + ' для ' + data.offer.guests + ' гостей';
     mapCardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin +
 ', выезд до ' + data.offer.checkout;
 
     var mapCardFeatures = mapCardElement.querySelector('.popup__features');
+
+
 
     var getMapCardFeatures = function () {
 
@@ -50,6 +72,25 @@
     mapCardPhotos = getMapCardPhotos();
 
     mapCardElement.querySelector('.popup__avatar').src = data.author.avatar;
+
+       
+    var closePopup = function () {
+      mapCardElement.classList.add('hidden');
+    };
+       
+    var buttonClose = mapCardElement.querySelector('.popup__close');
+
+    buttonClose.addEventListener('click', function () {
+     closePopup();
+    });
+
+    buttonClose.addEventListener('keydown', function (evt) {
+      window.util.isEnterEvent(evt, closePopup);
+    });
+
+    mapCardElement.addEventListener('keydown', function (evt) {
+      window.util.isEscEvent(evt, closePopup);
+    });
 
     return mapCardElement;
   };

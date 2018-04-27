@@ -15,7 +15,6 @@
   var pinMainPosLeft = mapPinMain.offsetLeft;
   var pinMainPosTop = mapPinMain.offsetTop;
 
-
   var onPinMainClick = function () {
     userDialog.classList.remove('map--faded');
     window.formData.adForm.classList.remove('ad-form--disabled');
@@ -109,6 +108,9 @@
     mapPinMain: mapPinMain,
 
     restoreOriginalState: function () {
+      userDialog.classList.add('map--faded');
+      window.formData.adForm.classList.add('ad-form--disabled');
+      window.util.setElementDisabled(window.formData.adFormFieldset, window.formData.elementClassDisabled);
       pinMainPosLeft = PIN_MAIN_START_COORDS.x;
       pinMainPosTop = PIN_MAIN_START_COORDS.y;
       mapPinMain.style.left = pinMainPosLeft + 'px';

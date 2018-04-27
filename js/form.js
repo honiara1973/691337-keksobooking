@@ -8,7 +8,7 @@
   var adForm = document.querySelector('.ad-form');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
   var adFormReset = adForm.querySelector('.ad-form__reset');
-  // var successMessage = document.querySelector('.success');
+  var successMessage = document.querySelector('.success');
   var elementClassDisabled = 'ad-form__element--disabled';
   var userPropertyAddress = adForm.querySelector('#address');
   var userPropertyType = adForm.querySelector('#type');
@@ -119,12 +119,8 @@
 
   };
 
-  adFormReset.addEventListener('click', function () { // пины не убрались, метка на место не вернулась
-    window.mapData.userDialog.classList.add('map--faded');
-    adForm.classList.add('ad-form--disabled');
-    window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
+  adFormReset.addEventListener('click', function () { 
     window.mapData.restoreOriginalState();
-
   });
 
 
@@ -143,14 +139,11 @@
   };
 
   adForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
     window.backend.save(new FormData(adForm), function () {
-      console.log('Данные отправлены');
-    // window.mapData.userDialog.classList.add('map--faded');
-    // adForm.classList.add('ad-form--disabled');
-      // window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
-      // successMessage.classList.remove('hidden');
+      window.mapData.restoreOriginalState(); 
+      successMessage.classList.remove('hidden');
     }, errorHandler);
+    evt.preventDefault();
 
   });
 
