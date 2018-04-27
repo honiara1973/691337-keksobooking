@@ -7,6 +7,8 @@
 
   var adForm = document.querySelector('.ad-form');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
+  var adFormReset = adForm.querySelector('.ad-form__reset');
+  var successMessage = document.querySelector('.success');
   var elementClassDisabled = 'ad-form__element--disabled';
   var userPropertyAddress = adForm.querySelector('#address');
   var userPropertyType = adForm.querySelector('#type');
@@ -18,15 +20,19 @@
 
   var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
 
+
   window.formData = {
     adForm: adForm,
     adFormFieldset: adFormFieldset,
     elementClassDisabled: elementClassDisabled,
-    userPropertyAddress: userPropertyAddress
+    setPinMainAddress: function (left, top, width, height) {
+      userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
+    }
   };
 
-
   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
+
+  userPropertyAddress.disabled = true;
 
   userPropertyType.addEventListener('change', function (evt) {
     var typeOption = evt.target;
@@ -109,5 +115,33 @@
     }
 
   };
+
+  adFormReset.addEventListener('click', function () {
+    window.mapData.restoreOriginalState();
+  });
+
+
+  var errorHandler = function (errorMessage) {
+    var errorElement = document.createElement('div');
+
+    errorElement.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: orange;';
+    errorElement.style.position = 'fixed';
+    errorElement.style.left = 0;
+    errorElement.style.right = 0;
+    errorElement.style.fontSize = '30px';
+
+    errorElement.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', errorElement);
+
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(adForm), function () {
+      window.mapData.restoreOriginalState();
+      successMessage.classList.remove('hidden');
+    }, errorHandler);
+    evt.preventDefault();
+
+  });
 
 })();
