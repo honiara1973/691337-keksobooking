@@ -20,11 +20,11 @@
 
   var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
 
-
   window.formData = {
     adForm: adForm,
     adFormFieldset: adFormFieldset,
     elementClassDisabled: elementClassDisabled,
+    adFormReset: adFormReset,
     setPinMainAddress: function (left, top, width, height) {
       userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
     }
@@ -32,7 +32,9 @@
 
   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
 
-  userPropertyAddress.disabled = true;
+  userPropertyAddress.addEventListener('change', function () {
+    return false;
+  });
 
   userPropertyType.addEventListener('change', function (evt) {
     var typeOption = evt.target;
@@ -40,7 +42,30 @@
 
     userPropertyPrice.placeholder = userPropertyMinPrice[typeOption.value];
     userPropertyPrice.min = userPropertyMinPrice[typeOption.value];
+  });
 
+ /* var setPriceValidity = function (field) {
+    if (field.validity.rangeUnderflow) {
+      field.setCustomValidity('Цена должна быть выше');
+    } else {
+      field.setCustomValidity('');
+    }
+  };
+  */
+
+  userPropertyPrice.addEventListener('input', function () {
+    userPropertyPrice.checkValidity();
+   // setPriceValidity(userPropertyPrice);
+  });
+
+
+  userPropertyPrice.addEventListener('change', function () {
+    userPropertyPrice.checkValidity();
+    //setPriceValidity(userPropertyPrice);
+  });
+
+  userPropertyPrice.addEventListener('invalid', function () {
+    userPropertyPrice.style.border = '3px solid green';
   });
 
   userPropertyTimein.addEventListener('change', function (evt) {
@@ -133,15 +158,23 @@
     errorElement.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', errorElement);
 
+    setTimeout(function () {
+      document.body.removeChild(errorElement);
+    }, 3000);
   };
 
   adForm.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(adForm), function () {
       window.mapData.restoreOriginalState();
       successMessage.classList.remove('hidden');
+      adForm.reset();
     }, errorHandler);
     evt.preventDefault();
 
+  });
+
+  successMessage.addEventListener('click', function () {
+    successMessage.classList.add('hidden');
   });
 
 })();

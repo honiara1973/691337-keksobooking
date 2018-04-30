@@ -13,14 +13,22 @@
     pinElement.querySelector('img').src = data.author.avatar;
     pinElement.querySelector('img').alt = data.offer.title;
 
-    pinElement.addEventListener('click', function () {
-
+    var createCardElement = function () {
       var fragmentCardElement = document.createDocumentFragment();
       fragmentCardElement.appendChild(window.renderCardElement(data));
+
       window.mapData.userDialog.insertBefore(fragmentCardElement, window.mapData.mapFilters);
+    };
+
+    pinElement.addEventListener('click', function () {
+      createCardElement();
     });
+
+    pinElement.addEventListener('keydown', function (evt) {
+      window.util.isEnterEvent(evt, createCardElement);
+    });
+
     return pinElement;
   };
-
 
 })();
