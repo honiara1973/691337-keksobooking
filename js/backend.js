@@ -35,7 +35,7 @@
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
-      checkLoad(xhr, onLoad, onError, 1000);
+      checkLoad(xhr, onLoad, onError, 10000);
 
       xhr.open('POST', URL);
       xhr.send(data);

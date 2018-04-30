@@ -105,6 +105,7 @@
     userDialog: userDialog,
     mapFilters: mapFilters,
     mapPinMain: mapPinMain,
+    mapPinsList: mapPinsList,
 
     restoreOriginalState: function () {
       userDialog.classList.add('map--faded');
@@ -115,9 +116,18 @@
       mapPinMain.style.left = pinMainPosLeft + 'px';
       mapPinMain.style.top = pinMainPosTop + 'px';
 
+
       var pins = mapPinsList.querySelectorAll('.map__pin');
-      for (var i = 1; i < pins.length; i++) {
-        mapPinsList.removeChild(pins[i]);
+
+      for (var i = 0; i < pins.length; i++) {
+        if (!pins[i].classList.contains('map__pin--main')) {
+          mapPinsList.removeChild(pins[i]);
+        }
+      }
+
+      var mapCardPopup = document.querySelectorAll('.popup');
+      for (var j = 0; j < mapCardPopup.length; j++) {
+        userDialog.removeChild(mapCardPopup[j]);
       }
 
     }
