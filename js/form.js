@@ -44,24 +44,13 @@
     userPropertyPrice.min = userPropertyMinPrice[typeOption.value];
   });
 
- /* var setPriceValidity = function (field) {
-    if (field.validity.rangeUnderflow) {
-      field.setCustomValidity('Цена должна быть выше');
-    } else {
-      field.setCustomValidity('');
-    }
-  };
-  */
-
   userPropertyPrice.addEventListener('input', function () {
     userPropertyPrice.checkValidity();
-   // setPriceValidity(userPropertyPrice);
   });
 
 
   userPropertyPrice.addEventListener('change', function () {
     userPropertyPrice.checkValidity();
-    //setPriceValidity(userPropertyPrice);
   });
 
   userPropertyPrice.addEventListener('invalid', function () {
