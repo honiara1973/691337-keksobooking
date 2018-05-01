@@ -7,6 +7,7 @@
   var pinHeight = mapCardPinTemplate.querySelector('img').height;
 
   window.renderPinElement = function (data) {
+
     var pinElement = mapCardPinTemplate.cloneNode(true);
     pinElement.style.left = (data.location.x - pinWidth / 2) + 'px';
     pinElement.style.top = (data.location.y - pinHeight) + 'px';
@@ -29,6 +30,7 @@
     });
 
     return pinElement;
+
   };
 
 })();

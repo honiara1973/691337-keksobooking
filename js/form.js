@@ -32,29 +32,23 @@
 
   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
 
-  userPropertyAddress.addEventListener('change', function () {
-    return false;
-  });
-
   userPropertyType.addEventListener('change', function (evt) {
     var typeOption = evt.target;
     typeOption.selected = 'true';
 
     userPropertyPrice.placeholder = userPropertyMinPrice[typeOption.value];
     userPropertyPrice.min = userPropertyMinPrice[typeOption.value];
+
   });
 
   userPropertyPrice.addEventListener('input', function () {
     userPropertyPrice.checkValidity();
-  });
 
+  });
 
   userPropertyPrice.addEventListener('change', function () {
     userPropertyPrice.checkValidity();
-  });
 
-  userPropertyPrice.addEventListener('invalid', function () {
-    userPropertyPrice.style.border = '3px solid green';
   });
 
   userPropertyTimein.addEventListener('change', function (evt) {
