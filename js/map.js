@@ -13,6 +13,7 @@
   var mapPinMain = userDialog.querySelector('.map__pin--main');
   var mapPinsList = document.querySelector('.map__pins');
   var mapFilters = document.querySelector('.map__filters-container');
+  var filters = mapFilters.querySelector('.map__filters');
   var pinMainPosLeft = mapPinMain.offsetLeft;
   var pinMainPosTop = mapPinMain.offsetTop;
 
@@ -78,12 +79,13 @@
   });
 
   var properties = [];
-  var filteredProperties = properties.slice(0);
   var propertyType = document.querySelector('#housing-type');
   var propertyPrice = document.querySelector('#housing-price');
   var propertyRoomNumber = document.querySelector('#housing-rooms');
   var propertyCapacity = document.querySelector('#housing-guests');
   var propertyFeatures = document.querySelector('#housing-features');
+
+ // var filteredProperties = properties.slice(0);
 
   var removePins = function () {
     var pins = mapPinsList.querySelectorAll('.map__pin');
@@ -119,7 +121,42 @@
   };
 
 
-  propertyType.addEventListener('change', function (evt) {
+
+   filters.addEventListener('change', function (evt) {
+    var filteredProperties = properties.slice(0);
+    console.log(filteredProperties);
+    var option = evt.target;
+    option.selected = true;
+    console.log(option.value);
+
+    switch (option.value) {
+      case 'any': filteredProperties = properties.slice(0); break;
+      case 'flat': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.type === 'flat';
+      }); break;
+      case 'house': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.type === 'house';
+      }); break;
+      case 'bungalo': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.type === 'bungalo';
+      }); break;
+      case 'middle': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.price <= 50000 && it.offer.price >= 10000;
+      }); break;
+      case 'low': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.price <= 10000;
+      }); break;
+      case 'high': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.price >= 50000;
+      }); break;
+
+    }
+    console.log(filteredProperties);
+    createPins(filteredProperties);
+  });
+
+
+  /* propertyType.addEventListener('change', function (evt) {
     var option = evt.target;
     option.selected = true;
 
@@ -195,10 +232,12 @@
     });
 
   });
+  */
 
   var loadHandler = function (data) {
     properties = data;
     createPins(properties);
+    console.log(properties);
   };
 
   var errorHandler = function (errorMessage) {
