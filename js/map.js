@@ -120,43 +120,98 @@
     return mapPinsList;
   };
 
-
-
-   filters.addEventListener('change', function (evt) {
+   
+  /* filters.addEventListener('change', function (evt) {
     var filteredProperties = properties.slice(0);
-    console.log(filteredProperties);
+   // console.log(filteredProperties);
+    var option = evt.target;
+    option.selected = true;
+    console.log(option.value);
+   */
+
+    var filteredObj = {
+     type: '',                   //массив квартир, допустим [1, 2, 5] объекты массива properties
+     price: '',                  //массив подходящих цен  [1, 4, 6] объекты массива properties
+     rooms: '',
+     guests: ''
+    };
+    
+    function inArray(arr) {
+      return function(x) {
+        return arr.indexOf(x) != -1;
+      };
+    }
+
+    function filter(arr, func) {
+      var result = [];
+    
+      for (var i = 0; i < arr.length; i++) {
+        var val = arr[i];
+        if (func(val)) {
+          result.push(val);
+        }
+      }
+    
+      return result;
+    }
+
+
+ 
+ // });
+
+   propertyType.addEventListener('change', function (evt) {
     var option = evt.target;
     option.selected = true;
     console.log(option.value);
 
-    switch (option.value) {
-      case 'any': filteredProperties = properties.slice(0); break;
-      case 'flat': filteredProperties = filteredProperties.filter(function (it) {
-        return it.offer.type === 'flat';
-      }); break;
-      case 'house': filteredProperties = filteredProperties.filter(function (it) {
-        return it.offer.type === 'house';
-      }); break;
-      case 'bungalo': filteredProperties = filteredProperties.filter(function (it) {
-        return it.offer.type === 'bungalo';
-      }); break;
-      case 'middle': filteredProperties = filteredProperties.filter(function (it) {
+   var getFilteredType = function () {
+       switch (option.value) {
+        case 'flat': filteredObj.type = properties.filter(function (it) {
+          return it.offer.type === 'flat';
+        }); break;
+        case 'house': filteredObj.type = properties.filter(function (it) {
+          return it.offer.type === 'house';
+        }); break;
+        case 'bungalo': filteredObj.type = properties.filter(function (it) {
+          return it.offer.type === 'bungalo';
+        }); break;
+        case 'any': filteredObj.type = properties.slice(0); break;
+      }
+      console.log(filteredObj.type);
+      return filteredObj.type;
+    }();
+   
+  });
+   
+  propertyPrice.addEventListener('change', function (evt) {
+    var option = evt.target;
+    option.selected = true;
+    console.log(option.value);
+
+    var getFilteredPrice = function () {
+      switch (option.value) {
+      case 'middle': filteredObj.price = properties.filter(function (it) {
         return it.offer.price <= 50000 && it.offer.price >= 10000;
       }); break;
-      case 'low': filteredProperties = filteredProperties.filter(function (it) {
+      case 'low': filteredObj.price = properties.filter(function (it) {
         return it.offer.price <= 10000;
       }); break;
-      case 'high': filteredProperties = filteredProperties.filter(function (it) {
+      case 'high': filteredObj.price = properties.filter(function (it) {
         return it.offer.price >= 50000;
       }); break;
-
+      case 'any': filteredObj.price = properties.slice(0); break;
     }
-    console.log(filteredProperties);
-    createPins(filteredProperties);
+   console.log(filteredObj.price); 
+   return filteredObj.price;
+  }();
   });
 
+  
+  
 
-  /* propertyType.addEventListener('change', function (evt) {
+   
+/*
+  propertyType.addEventListener('change', function (evt) {
     var option = evt.target;
     option.selected = true;
 
@@ -217,22 +272,37 @@
 
     createPins(filteredProperties);
   });
+  
 
-  propertyFeatures.addEventListener('click', function (evt) {
-    var feature = evt.target;
 
-    filteredProperties = properties.filter(function (it) {
-      for (var i = 0; i < properties.offer.features.length; i++) {
+   
+   propertyFeatures.addEventListener('click', function (evt) {
+    var filteredProperties = properties.slice(0);
+    var option = evt.target;
+    console.log(option.value);
+   
+  });
 
+    /* filteredProperties = properties.filter(function (it) {
+        if (it.offer.features.indexOf(option.value) >= 0) {
+        return it.offer.features; //выдает энное количество раз полный массив пропертиес.
+      }
+      console.log(filteredProperties.length);
+      createPins(filteredProperties);
+    });
+  */  
+
+/*
+   filteredProperties = properties.filter(function (it) {
+      if (it.offer.features.indexOf)
         if (properties.offer.features[i] === feature.value) {
           properties.offer.features = it.offer.features;
         }
       }
       return it.offer.features;
     });
-
-  });
-  */
+ 
+*/
 
   var loadHandler = function (data) {
     properties = data;
