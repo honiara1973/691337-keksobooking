@@ -120,13 +120,13 @@
     return mapPinsList;
   };
 
-   
-  /* filters.addEventListener('change', function (evt) {
+    /* filters.addEventListener('change', function (evt) {
     var filteredProperties = properties.slice(0);
-   // console.log(filteredProperties);
+    console.log(filteredProperties);
     var option = evt.target;
     option.selected = true;
     console.log(option.value);
+    });
    */
 
     var filteredObj = {
@@ -154,10 +154,6 @@
     
       return result;
     }
-
-
- 
- // });
 
    propertyType.addEventListener('change', function (evt) {
     var option = evt.target;
@@ -206,10 +202,7 @@
   }();
   });
 
-  
-  
-
-   
+     
 /*
   propertyType.addEventListener('change', function (evt) {
     var option = evt.target;
