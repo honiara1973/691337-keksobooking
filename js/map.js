@@ -85,6 +85,8 @@
   var propertyCapacity = document.querySelector('#housing-guests');
   var propertyFeatures = document.querySelector('#housing-features');
 
+ // var filteredProperties = properties.slice(0);
+
   var removePins = function () {
     var pins = mapPinsList.querySelectorAll('.map__pin');
 
@@ -118,14 +120,23 @@
     return mapPinsList;
   };
 
+    /* filters.addEventListener('change', function (evt) {
+    var filteredProperties = properties.slice(0);
+    console.log(filteredProperties);
+    var option = evt.target;
+    option.selected = true;
+    console.log(option.value);
+    });
+   */
+
     var filteredObj = {
-     type: '',                   
-     price: '',                  
+     type: '',                   //массив квартир, допустим [1, 2, 5] объекты массива properties
+     price: '',                  //массив подходящих цен  [1, 4, 6] объекты массива properties
      rooms: '',
      guests: ''
     };
     
-    function inArray(arr) {
+   /* function inArray(arr) {
       return function(x) {
         return arr.indexOf(x) != -1;
       };
@@ -143,7 +154,8 @@
     
       return result;
     }
-
+   */
+  
    propertyType.addEventListener('change', function (evt) {
     var option = evt.target;
     option.selected = true;
@@ -190,6 +202,101 @@
    return filteredObj.price;
   }();
   });
+
+     
+/*
+  propertyType.addEventListener('change', function (evt) {
+    var option = evt.target;
+    option.selected = true;
+
+    switch (option.value) {
+      case 'flat': filteredProperties = properties.filter(function (it) {
+        return it.offer.type === 'flat';
+      }); break;
+      case 'house': filteredProperties = properties.filter(function (it) {
+        return it.offer.type === 'house';
+      }); break;
+      case 'bungalo': filteredProperties = properties.filter(function (it) {
+        return it.offer.type === 'bungalo';
+      }); break;
+      case 'any': filteredProperties = properties.slice(0); break;
+    }
+
+    createPins(filteredProperties);
+  });
+
+  propertyPrice.addEventListener('change', function (evt) {
+    var option = evt.target;
+    option.selected = true;
+
+    switch (option.value) {
+      case 'middle': filteredProperties = properties.filter(function (it) {
+        return it.offer.price <= 50000 && it.offer.price >= 10000;
+      }); break;
+      case 'low': filteredProperties = properties.filter(function (it) {
+        return it.offer.price <= 10000;
+      }); break;
+      case 'high': filteredProperties = properties.filter(function (it) {
+        return it.offer.price >= 50000;
+      }); break;
+      case 'any': filteredProperties = properties.slice(0); break;
+    }
+
+    createPins(filteredProperties);
+  });
+
+  propertyRoomNumber.addEventListener('change', function (evt) {
+    var option = evt.target;
+    option.selected = true;
+
+    filteredProperties = properties.filter(function (it) {
+      return it.offer.rooms === parseInt(option.value, 10);
+    });
+
+    createPins(filteredProperties);
+  });
+
+  propertyCapacity.addEventListener('change', function (evt) {
+    var option = evt.target;
+    option.selected = true;
+
+    filteredProperties = properties.filter(function (it) {
+      return it.offer.guests === parseInt(option.value, 10);
+    });
+
+    createPins(filteredProperties);
+  });
+  
+
+
+   
+   propertyFeatures.addEventListener('click', function (evt) {
+    var filteredProperties = properties.slice(0);
+    var option = evt.target;
+    console.log(option.value);
+   
+  });
+
+    /* filteredProperties = properties.filter(function (it) {
+        if (it.offer.features.indexOf(option.value) >= 0) {
+        return it.offer.features; //выдает энное количество раз полный массив пропертиес.
+      }
+      console.log(filteredProperties.length);
+      createPins(filteredProperties);
+    });
+  */  
+
+/*
+   filteredProperties = properties.filter(function (it) {
+      if (it.offer.features.indexOf)
+        if (properties.offer.features[i] === feature.value) {
+          properties.offer.features = it.offer.features;
+        }
+      }
+      return it.offer.features;
+    });
+ 
+*/
 
   var loadHandler = function (data) {
     properties = data;
