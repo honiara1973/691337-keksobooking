@@ -85,7 +85,7 @@
   var propertyCapacity = document.querySelector('#housing-guests');
   var propertyFeatures = document.querySelector('#housing-features');
 
- // var filteredProperties = properties.slice(0);
+  // var filteredProperties = properties.slice(0);
 
   var removePins = function () {
     var pins = mapPinsList.querySelectorAll('.map__pin');
@@ -120,205 +120,92 @@
     return mapPinsList;
   };
 
-    filters.addEventListener('change', function (evt) {
+  filters.addEventListener('change', function (evt) {
     var filteredProperties = properties.slice(0);
-    console.log(filteredProperties);
-    var option = evt.target;
-    option.selected = true;
-  //  console.log(option.value);
+    // console.log(filteredProperties);
 
-    var value = propertyType.value;
+    // var option = evt.target;
+    // option.selected = true;
+    // console.log(option.value);
+
     console.log(propertyType.value);
+    console.log(propertyPrice.value);
+    console.log(propertyRoomNumber.value);
+    console.log(propertyCapacity.value);
 
-    
-      switch (option.value) {
-        case 'flat': filteredProperties = properties.filter(function (it) {
-          return it.offer.type === 'flat';
-        }); break;
-        case 'house': filteredProperties = properties.filter(function (it) {
-          return it.offer.type === 'house';
-        }); break;
-        case 'bungalo': filteredProperties = properties.filter(function (it) {
-          return it.offer.type === 'bungalo';
-        }); break;
-        case 'any': filteredProperties = properties.slice(0); break;
-      }
-  
-      createPins(filteredProperties);
-    });
 
-    });
-   
-
-    /*var filteredObj = {
-     type: '',                   //массив квартир, допустим [1, 2, 5] объекты массива properties
-     price: '',                  //массив подходящих цен  [1, 4, 6] объекты массива properties
-     rooms: '',
-     guests: ''
-    };
-    */
-
-   /* function inArray(arr) {
-      return function(x) {
-        return arr.indexOf(x) != -1;
-      };
-    }
-
-    function filter(arr, func) {
-      var result = [];
-    
-      for (var i = 0; i < arr.length; i++) {
-        var val = arr[i];
-        if (func(val)) {
-          result.push(val);
-        }
-      }
-    
-      return result;
-    }
-   */
-
-  /* propertyType.addEventListener('change', function (evt) {
-    var option = evt.target;
-    option.selected = true;
-    console.log(option.value);
-
-   var getFilteredType = function () {
-       switch (option.value) {
-        case 'flat': filteredObj.type = properties.filter(function (it) {
-          return it.offer.type === 'flat';
-        }); break;
-        case 'house': filteredObj.type = properties.filter(function (it) {
-          return it.offer.type === 'house';
-        }); break;
-        case 'bungalo': filteredObj.type = properties.filter(function (it) {
-          return it.offer.type === 'bungalo';
-        }); break;
-        case 'any': filteredObj.type = properties.slice(0); break;
-      }
-      console.log(filteredObj.type);
-      return filteredObj.type;
-    }();
-   
-  });
-   
-  propertyPrice.addEventListener('change', function (evt) {
-    var option = evt.target;
-    option.selected = true;
-    console.log(option.value);
-
-    var getFilteredPrice = function () {
-      switch (option.value) {
-      case 'middle': filteredObj.price = properties.filter(function (it) {
-        return it.offer.price <= 50000 && it.offer.price >= 10000;
-      }); break;
-      case 'low': filteredObj.price = properties.filter(function (it) {
-        return it.offer.price <= 10000;
-      }); break;
-      case 'high': filteredObj.price = properties.filter(function (it) {
-        return it.offer.price >= 50000;
-      }); break;
-      case 'any': filteredObj.price = properties.slice(0); break;
-    }
-   console.log(filteredObj.price); 
-   return filteredObj.price;
-  }();
-  });
-*/
-     
-/*
-  propertyType.addEventListener('change', function (evt) {
-    var option = evt.target;
-    option.selected = true;
-
-    switch (option.value) {
-      case 'flat': filteredProperties = properties.filter(function (it) {
+    switch (propertyType.value) {
+      case 'any': filteredProperties = properties.slice(0); break;
+      case 'flat': filteredProperties = filteredProperties.filter(function (it) {
         return it.offer.type === 'flat';
       }); break;
-      case 'house': filteredProperties = properties.filter(function (it) {
+      case 'house': filteredProperties = filteredProperties.filter(function (it) {
         return it.offer.type === 'house';
       }); break;
-      case 'bungalo': filteredProperties = properties.filter(function (it) {
+      case 'bungalo': filteredProperties = filteredProperties.filter(function (it) {
         return it.offer.type === 'bungalo';
       }); break;
-      case 'any': filteredProperties = properties.slice(0); break;
     }
 
-    createPins(filteredProperties);
-  });
-
-  propertyPrice.addEventListener('change', function (evt) {
-    var option = evt.target;
-    option.selected = true;
-
-    switch (option.value) {
-      case 'middle': filteredProperties = properties.filter(function (it) {
+    switch (propertyPrice.value) {
+    //  case 'any': filteredProperties = properties.slice(0); break;
+      case 'middle': filteredProperties = filteredProperties.filter(function (it) {
         return it.offer.price <= 50000 && it.offer.price >= 10000;
       }); break;
-      case 'low': filteredProperties = properties.filter(function (it) {
+      case 'low': filteredProperties = filteredProperties.filter(function (it) {
         return it.offer.price <= 10000;
       }); break;
-      case 'high': filteredProperties = properties.filter(function (it) {
+      case 'high': filteredProperties = filteredProperties.filter(function (it) {
         return it.offer.price >= 50000;
       }); break;
-      case 'any': filteredProperties = properties.slice(0); break;
     }
 
-    createPins(filteredProperties);
-  });
+    switch (propertyRoomNumber.value) {
+      //   case 'any': filteredProperties = properties.slice(0); break;
+      case '1': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.rooms === 1;
+      }); break;
+      case '2': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.rooms === 2;
+      }); break;
+      case '3': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.rooms === 3;
+      }); break;
+    }
 
-  propertyRoomNumber.addEventListener('change', function (evt) {
-    var option = evt.target;
-    option.selected = true;
-
-    filteredProperties = properties.filter(function (it) {
-      return it.offer.rooms === parseInt(option.value, 10);
-    });
-
-    createPins(filteredProperties);
-  });
-
-  propertyCapacity.addEventListener('change', function (evt) {
-    var option = evt.target;
-    option.selected = true;
-
-    filteredProperties = properties.filter(function (it) {
-      return it.offer.guests === parseInt(option.value, 10);
-    });
-
-    createPins(filteredProperties);
-  });
-  
+    switch (propertyCapacity.value) {
+      //   case 'any': filteredProperties = properties.slice(0); break;
+      case '1': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.guests === 1;
+      }); break;
+      case '2': filteredProperties = filteredProperties.filter(function (it) {
+        return it.offer.guests === 2;
+      }); break;
+    }
 
 
-   
-   propertyFeatures.addEventListener('click', function (evt) {
-    var filteredProperties = properties.slice(0);
-    var option = evt.target;
-    console.log(option.value);
-   
-  });
+    // var inputChecked = evt.target;
+    // inputChecked.checked = true;
+    // console.log(inputChecked.value);
 
-    /* filteredProperties = properties.filter(function (it) {
-        if (it.offer.features.indexOf(option.value) >= 0) {
-        return it.offer.features; //выдает энное количество раз полный массив пропертиес.
+    for (var i = 0; i < propertyFeatures.length; i++) {
+      // propertyFeatures[i].addEventListener('change', function () {
+      //   propertyFeatures[i].checked = true;
+      //   console.log(propertyFeatures[i]);
+      // });
+      //  console.log(propertyFeatures[i].value);
+
+      if (propertyFeatures[i].checked) {
+        filteredProperties = filteredProperties.filter(function (it) {
+          return it.offer.features.indexOf(propertyFeatures[i].value) >= 0;
+        });
       }
-      console.log(filteredProperties.length);
-      createPins(filteredProperties);
-    });
-  */  
+    }
 
-/*
-   filteredProperties = properties.filter(function (it) {
-      if (it.offer.features.indexOf)
-        if (properties.offer.features[i] === feature.value) {
-          properties.offer.features = it.offer.features;
-        }
-      }
-      return it.offer.features;
-    });
- 
-*/
+
+    createPins(filteredProperties);
+  });
+
 
   var loadHandler = function (data) {
     properties = data;
