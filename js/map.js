@@ -120,22 +120,44 @@
     return mapPinsList;
   };
 
-    /* filters.addEventListener('change', function (evt) {
+    filters.addEventListener('change', function (evt) {
     var filteredProperties = properties.slice(0);
     console.log(filteredProperties);
     var option = evt.target;
     option.selected = true;
-    console.log(option.value);
-    });
-   */
+  //  console.log(option.value);
 
-    var filteredObj = {
+    var value = propertyType.value;
+    console.log(propertyType.value);
+
+    
+      switch (option.value) {
+        case 'flat': filteredProperties = properties.filter(function (it) {
+          return it.offer.type === 'flat';
+        }); break;
+        case 'house': filteredProperties = properties.filter(function (it) {
+          return it.offer.type === 'house';
+        }); break;
+        case 'bungalo': filteredProperties = properties.filter(function (it) {
+          return it.offer.type === 'bungalo';
+        }); break;
+        case 'any': filteredProperties = properties.slice(0); break;
+      }
+  
+      createPins(filteredProperties);
+    });
+
+    });
+   
+
+    /*var filteredObj = {
      type: '',                   //массив квартир, допустим [1, 2, 5] объекты массива properties
      price: '',                  //массив подходящих цен  [1, 4, 6] объекты массива properties
      rooms: '',
      guests: ''
     };
-    
+    */
+
    /* function inArray(arr) {
       return function(x) {
         return arr.indexOf(x) != -1;
@@ -155,8 +177,8 @@
       return result;
     }
    */
-  
-   propertyType.addEventListener('change', function (evt) {
+
+  /* propertyType.addEventListener('change', function (evt) {
     var option = evt.target;
     option.selected = true;
     console.log(option.value);
@@ -202,7 +224,7 @@
    return filteredObj.price;
   }();
   });
-
+*/
      
 /*
   propertyType.addEventListener('change', function (evt) {
