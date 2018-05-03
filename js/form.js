@@ -16,7 +16,8 @@
   var userPropertyTimeout = adForm.querySelector('#timeout');
   var userPropertyRoomNumber = adForm.querySelector('#room_number');
   var userPropertyCapacity = adForm.querySelector('#capacity');
-  var userPropertyFeatures = adForm.querySelectorAll('.features input');
+  var userPropertyFeatures = adForm.querySelector('.features');
+  var userPropertyFeaturesList = adForm.querySelectorAll('.features input');
 
   var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
 
@@ -107,9 +108,11 @@
     }
   };
 
+  window.util.addFeatureChecked(userPropertyFeatures);
+
   adFormReset.addEventListener('click', function () {
     window.mapData.restoreOriginalState();
-    window.util.removeFeaturesChecked(userPropertyFeatures);
+    window.util.removeFeaturesChecked(userPropertyFeaturesList);
   });
 
   adForm.addEventListener('submit', function (evt) {
@@ -117,7 +120,7 @@
       window.mapData.restoreOriginalState();
       successMessage.classList.remove('hidden');
       adForm.reset();
-      window.util.removeFeaturesChecked(userPropertyFeatures);
+      window.util.removeFeaturesChecked(userPropertyFeaturesList);
     }, window.util.onErrorLoad);
     evt.preventDefault();
   });

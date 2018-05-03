@@ -7,7 +7,7 @@
   var PIN_MAIN_START_COORDS = {x: 570, y: 375};
   var MOVE_LIMIT_TOP = 150;
   var MOVE_LIMIT_BOTTOM = 500;
-  
+
   var map = document.querySelector('.map');
   var pinMain = map.querySelector('.map__pin--main');
   var pinMainPosLeft = pinMain.offsetLeft;
@@ -79,7 +79,7 @@
     window.mapData.properties = data;
     window.util.createPins(window.mapData.properties);
   };
-  
+
   window.mapData = {
     map: map,
     properties: [],

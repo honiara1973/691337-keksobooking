@@ -2,17 +2,18 @@
 
 (function () {
   var DEBOUNCE_INTERVAL = 500;
-  
+
   var filters = document.querySelector('.map__filters');
   var propertyType = document.querySelector('#housing-type');
   var propertyPrice = document.querySelector('#housing-price');
   var propertyRoomNumber = document.querySelector('#housing-rooms');
   var propertyCapacity = document.querySelector('#housing-guests');
-  var propertyFeatures = document.querySelectorAll('.map__features input');
+  var propertyFeaturesList = document.querySelectorAll('.map__features input');
   var lastTimeout;
 
   filters.addEventListener('change', function () {
-  var filteredProperties = window.mapData.properties.slice(0);
+    var filteredProperties = window.mapData.properties.slice(0);
+
 
     switch (propertyType.value) {
       case 'flat':
@@ -81,34 +82,33 @@
         break;
     }
 
-    for (var i = 0; i < propertyFeatures.length; i++) {
+    for (var i = 0; i < propertyFeaturesList.length; i++) {
 
-      if (propertyFeatures[i].checked) {
+      if (propertyFeaturesList[i].checked) {
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.features.indexOf(propertyFeatures[i].value) >= 0;
+          return it.offer.features.indexOf(propertyFeaturesList[i].value) >= 0;
         });
       }
     }
-   
-   
-   if (lastTimeout) {
+
+    if (lastTimeout) {
       clearTimeout(lastTimeout);
     }
     lastTimeout = setTimeout(function () {
       window.util.createPins(filteredProperties);
     }, DEBOUNCE_INTERVAL);
-   
-   });
 
-    window.removeFilters = function () {
-    
-      propertyType.selectedIndex = 0;
-      propertyPrice.selectedIndex = 0;
-      propertyRoomNumber.selectedIndex = 0;
-      propertyCapacity.selectedIndex = 0;
-  
-      window.util.removeFeaturesChecked(propertyFeatures);
-     
-    };
+  });
+
+  window.removeFilters = function () {
+
+    propertyType.selectedIndex = 0;
+    propertyPrice.selectedIndex = 0;
+    propertyRoomNumber.selectedIndex = 0;
+    propertyCapacity.selectedIndex = 0;
+
+    window.util.removeFeaturesChecked(propertyFeaturesList);
+
+  };
 
 })();
