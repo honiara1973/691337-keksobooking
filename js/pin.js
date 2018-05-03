@@ -5,6 +5,7 @@
   var mapCardPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var pinWidth = mapCardPinTemplate.querySelector('img').width;
   var pinHeight = mapCardPinTemplate.querySelector('img').height;
+  var mapFilters = document.querySelector('.map__filters-container');
 
   window.renderPinElement = function (data) {
 
@@ -18,7 +19,7 @@
       var fragmentCardElement = document.createDocumentFragment();
       fragmentCardElement.appendChild(window.renderCardElement(data));
 
-      window.mapData.userDialog.insertBefore(fragmentCardElement, window.mapData.mapFilters);
+      window.mapData.map.insertBefore(fragmentCardElement, mapFilters);
     };
 
     pinElement.addEventListener('click', function () {
@@ -30,7 +31,6 @@
     });
 
     return pinElement;
-
   };
 
 })();

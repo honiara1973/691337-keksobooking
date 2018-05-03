@@ -76,7 +76,7 @@
       window.util.isEscEvent(evt, closePopup);
     });
 
-    var pins = window.mapData.mapPinsList.querySelectorAll('.map__pin');
+    var pins = document.querySelectorAll('.map__pin');
 
     for (var i = 1; i < pins.length; i++) {
       pins[i].addEventListener('click', function () {
