@@ -5,8 +5,10 @@
   var mapCardPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var pinWidth = mapCardPinTemplate.querySelector('img').width;
   var pinHeight = mapCardPinTemplate.querySelector('img').height;
+  var mapFilters = document.querySelector('.map__filters-container');
 
   window.renderPinElement = function (data) {
+
     var pinElement = mapCardPinTemplate.cloneNode(true);
     pinElement.style.left = (data.location.x - pinWidth / 2) + 'px';
     pinElement.style.top = (data.location.y - pinHeight) + 'px';
@@ -17,7 +19,7 @@
       var fragmentCardElement = document.createDocumentFragment();
       fragmentCardElement.appendChild(window.renderCardElement(data));
 
-      window.mapData.userDialog.insertBefore(fragmentCardElement, window.mapData.mapFilters);
+      window.mapData.map.insertBefore(fragmentCardElement, mapFilters);
     };
 
     pinElement.addEventListener('click', function () {

@@ -4,7 +4,6 @@
 
   var MAX_GUESTS_PER_ROOM = 1;
 
-
   var adForm = document.querySelector('.ad-form');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
   var adFormReset = adForm.querySelector('.ad-form__reset');
@@ -17,24 +16,12 @@
   var userPropertyTimeout = adForm.querySelector('#timeout');
   var userPropertyRoomNumber = adForm.querySelector('#room_number');
   var userPropertyCapacity = adForm.querySelector('#capacity');
+  var userPropertyFeatures = adForm.querySelector('.features');
+  var userPropertyFeaturesList = adForm.querySelectorAll('.features input');
 
   var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
 
-  window.formData = {
-    adForm: adForm,
-    adFormFieldset: adFormFieldset,
-    elementClassDisabled: elementClassDisabled,
-    adFormReset: adFormReset,
-    setPinMainAddress: function (left, top, width, height) {
-      userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
-    }
-  };
-
   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
-
-  userPropertyAddress.addEventListener('change', function () {
-    return false;
-  });
 
   userPropertyType.addEventListener('change', function (evt) {
     var typeOption = evt.target;
@@ -48,13 +35,8 @@
     userPropertyPrice.checkValidity();
   });
 
-
   userPropertyPrice.addEventListener('change', function () {
     userPropertyPrice.checkValidity();
-  });
-
-  userPropertyPrice.addEventListener('invalid', function () {
-    userPropertyPrice.style.border = '3px solid green';
   });
 
   userPropertyTimein.addEventListener('change', function (evt) {
@@ -69,7 +51,6 @@
     timeoutOption.selected = 'true';
 
     getDependentOption(timeoutOption, userPropertyTimein);
-
   });
 
   var getDependentOption = function (option, dependentArray) {
@@ -102,7 +83,6 @@
     }
 
     userPropertyCapacity.setCustomValidity('');
-
   });
 
   userPropertyCapacity.addEventListener('change', function (evt) {
@@ -111,7 +91,6 @@
     roomsCapacityValue.capacity = capacityOption.value;
 
     setGuestsValidity(userPropertyCapacity);
-
   });
 
   var setGuestsValidity = function (field) {
@@ -127,43 +106,38 @@
     } else {
       field.setCustomValidity('');
     }
-
   };
+
+  window.util.addFeatureChecked(userPropertyFeatures);
 
   adFormReset.addEventListener('click', function () {
     window.mapData.restoreOriginalState();
+    window.util.removeFeaturesChecked(userPropertyFeaturesList);
   });
-
-
-  var errorHandler = function (errorMessage) {
-    var errorElement = document.createElement('div');
-
-    errorElement.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: orange;';
-    errorElement.style.position = 'fixed';
-    errorElement.style.left = 0;
-    errorElement.style.right = 0;
-    errorElement.style.fontSize = '30px';
-
-    errorElement.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', errorElement);
-
-    setTimeout(function () {
-      document.body.removeChild(errorElement);
-    }, 3000);
-  };
 
   adForm.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(adForm), function () {
       window.mapData.restoreOriginalState();
       successMessage.classList.remove('hidden');
       adForm.reset();
-    }, errorHandler);
+      window.util.removeFeaturesChecked(userPropertyFeaturesList);
+    }, window.util.onErrorLoad);
     evt.preventDefault();
-
   });
 
   successMessage.addEventListener('click', function () {
     successMessage.classList.add('hidden');
   });
+
+
+  window.formData = {
+    adForm: adForm,
+    adFormFieldset: adFormFieldset,
+    elementClassDisabled: elementClassDisabled,
+    adFormReset: adFormReset,
+    setPinMainAddress: function (left, top, width, height) {
+      userPropertyAddress.value = (left + width / 2) + ', ' + (top + height);
+    }
+  };
 
 })();
