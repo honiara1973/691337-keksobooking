@@ -3,11 +3,11 @@
 (function () {
 
   var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
-  
+
   var mapCardTypeRu = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
-    'house': 'Дом', 
+    'house': 'Дом',
     'palace': 'Дворец'
   };
 
@@ -30,8 +30,8 @@
       domNode.appendChild(mapCardFeature);
     }
 
-  };  
-   
+  };
+
   var addMapCardPhotos = function (domNode, images) {
 
     for (var j = 0; j < images.length; j++) {
@@ -45,7 +45,7 @@
     }
 
   };
-  
+
   window.renderCardElement = function (data) {
     var mapCardElement = mapCardTemplate.cloneNode(true);
     mapCardElement.querySelector('.popup__title').textContent = data.offer.title;
