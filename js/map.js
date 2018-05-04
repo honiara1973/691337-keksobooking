@@ -19,7 +19,7 @@
     window.util.setElementEnabled(window.formData.adFormFieldset, window.formData.elementClassDisabled);
   };
 
-  var moveLimits = {
+  var MoveLimits = {
     top: map.offsetTop - PIN_MAIN_HEIGHT + MOVE_LIMIT_TOP,
     left: map.offsetLeft - PIN_MAIN_WIDTH / 2,
     bottom: map.offsetTop - PIN_MAIN_HEIGHT + MOVE_LIMIT_BOTTOM,
@@ -49,12 +49,12 @@
       pinMainPosLeft = pinMain.offsetLeft - shift.x;
       pinMainPosTop = pinMain.offsetTop - shift.y;
 
-      pinMainPosLeft = Math.max(pinMainPosLeft, moveLimits.left);
-      pinMainPosLeft = Math.min(pinMainPosLeft, moveLimits.right);
+      pinMainPosLeft = Math.max(pinMainPosLeft, MoveLimits.left);
+      pinMainPosLeft = Math.min(pinMainPosLeft, MoveLimits.right);
       pinMain.style.left = pinMainPosLeft + 'px';
 
-      pinMainPosTop = Math.max(pinMainPosTop, moveLimits.top);
-      pinMainPosTop = Math.min(pinMainPosTop, moveLimits.bottom);
+      pinMainPosTop = Math.max(pinMainPosTop, MoveLimits.top);
+      pinMainPosTop = Math.min(pinMainPosTop, MoveLimits.bottom);
       pinMain.style.top = pinMainPosTop + 'px';
 
       window.formData.setPinMainAddress(pinMainPosLeft, pinMainPosTop, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);

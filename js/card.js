@@ -3,11 +3,49 @@
 (function () {
 
   var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
-  var mapCardTypeRu = {'flat': 'Квартира', 'bungalo': 'Бунгало', 'house': 'Дом', 'palace': 'Дворец'};
-  var featureClassListMap = {'wifi': 'popup__feature--wifi', 'dishwasher': 'popup__feature--dishwasher',
-    'parking': 'popup__feature--parking', 'washer': 'popup__feature--washer', 'elevator': 'popup__feature--elevator',
-    'conditioner': 'popup__feature--conditioner'};
+  
+  var mapCardTypeRu = {
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом', 
+    'palace': 'Дворец'
+  };
 
+  var featureClassListMap = {
+    'wifi': 'popup__feature--wifi',
+    'dishwasher': 'popup__feature--dishwasher',
+    'parking': 'popup__feature--parking',
+    'washer': 'popup__feature--washer',
+    'elevator': 'popup__feature--elevator',
+    'conditioner': 'popup__feature--conditioner'
+  };
+
+  var addMapCardFeatures = function (domNode, features) {
+
+    for (var j = 0; j < features.length; j++) {
+      var mapCardFeature = document.createElement('li');
+      mapCardFeature.classList.add('popup__feature');
+      mapCardFeature.classList.add(featureClassListMap[features[j]]);
+      mapCardFeature.textContent = featureClassListMap[features[j]];
+      domNode.appendChild(mapCardFeature);
+    }
+
+  };  
+   
+  var addMapCardPhotos = function (domNode, images) {
+
+    for (var j = 0; j < images.length; j++) {
+      var mapCardPhoto = document.createElement('img');
+      mapCardPhoto.classList.add('popup__photo');
+      mapCardPhoto.src = images[j];
+      mapCardPhoto.width = '45';
+      mapCardPhoto.height = '40';
+      mapCardPhoto.alt = 'Фотография жилья';
+      domNode.appendChild(mapCardPhoto);
+    }
+
+  };
+  
   window.renderCardElement = function (data) {
     var mapCardElement = mapCardTemplate.cloneNode(true);
     mapCardElement.querySelector('.popup__title').textContent = data.offer.title;
@@ -22,39 +60,12 @@
 ', выезд до ' + data.offer.checkout;
 
     var mapCardFeatures = mapCardElement.querySelector('.popup__features');
-
-    var getMapCardFeatures = function () {
-
-      for (var j = 0; j < data.offer.features.length; j++) {
-        var mapCardFeature = document.createElement('li');
-        mapCardFeature.classList.add('popup__feature');
-        mapCardFeature.classList.add(featureClassListMap[data.offer.features[j]]);
-        mapCardFeature.textContent = featureClassListMap[data.offer.features[j]];
-        mapCardFeatures.appendChild(mapCardFeature);
-      }
-      return mapCardFeatures;
-    };
-
-    mapCardFeatures = getMapCardFeatures();
+    addMapCardFeatures(mapCardFeatures, data.offer.features);
 
     mapCardElement.querySelector('.popup__description').textContent = data.offer.description;
 
     var mapCardPhotos = mapCardElement.querySelector('.popup__photos');
-
-    var getMapCardPhotos = function () {
-      for (var j = 0; j < data.offer.photos.length; j++) {
-        var mapCardPhoto = document.createElement('img');
-        mapCardPhoto.classList.add('popup__photo');
-        mapCardPhoto.src = data.offer.photos[j];
-        mapCardPhoto.width = '45';
-        mapCardPhoto.height = '40';
-        mapCardPhoto.alt = 'Фотография жилья';
-        mapCardPhotos.appendChild(mapCardPhoto);
-      }
-      return mapCardPhotos;
-    };
-
-    mapCardPhotos = getMapCardPhotos();
+    addMapCardPhotos(mapCardPhotos, data.offer.photos);
 
     mapCardElement.querySelector('.popup__avatar').src = data.author.avatar;
 
