@@ -4,7 +4,7 @@ window.util = (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
   var PIN_AMOUNT_MAX = 5;
-  var SHOW_MESSAGE_INTERVAL = 3000;
+  var MESSAGE_SHOW_INTERVAL = 3000;
 
   var pinsList = document.querySelector('.map__pins');
 
@@ -63,7 +63,7 @@ window.util = (function () {
 
       setTimeout(function () {
         document.body.removeChild(errorElement);
-      }, SHOW_MESSAGE_INTERVAL);
+      }, MESSAGE_SHOW_INTERVAL);
 
     },
 
