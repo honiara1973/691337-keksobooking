@@ -3,6 +3,8 @@
 (function () {
 
   var MAX_GUESTS_PER_ROOM = 1;
+  var USER_PROPERTY_MIN_PRICE = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
+  var DIFFERENT_VALUE = {hundred: '100', zero: '0'};
 
   var adForm = document.querySelector('.ad-form');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
@@ -19,16 +21,14 @@
   var userPropertyFeatures = adForm.querySelector('.features');
   var userPropertyFeaturesList = adForm.querySelectorAll('.features input');
 
-  var userPropertyMinPrice = {flat: 1000, bungalo: 0, house: 5000, palace: 10000};
-
   window.util.setElementDisabled(adFormFieldset, elementClassDisabled);
 
   userPropertyType.addEventListener('change', function (evt) {
     var typeOption = evt.target;
     typeOption.selected = 'true';
 
-    userPropertyPrice.placeholder = userPropertyMinPrice[typeOption.value];
-    userPropertyPrice.min = userPropertyMinPrice[typeOption.value];
+    userPropertyPrice.placeholder = USER_PROPERTY_MIN_PRICE[typeOption.value];
+    userPropertyPrice.min = USER_PROPERTY_MIN_PRICE[typeOption.value];
   });
 
   userPropertyPrice.addEventListener('input', function () {
@@ -77,8 +77,7 @@
     var differentValue = userPropertyCapacity.querySelector('option[value=\'0\']');
 
     getDependentOption(roomOption, userPropertyCapacity);
-
-    if (roomOption.value === '100') {
+    if (roomOption.value === DIFFERENT_VALUE.hundred) {
       differentValue.selected = 'true';
     }
 
@@ -99,9 +98,9 @@
       field.setCustomValidity('Количество гостей превышает максимально возможное. \nКоличество комнат должно быть не меньше '
     + (roomsCapacityValue.capacity / MAX_GUESTS_PER_ROOM) + '.');
 
-    } else if (roomsCapacityValue.capacity === '0' && roomsCapacityValue.rooms !== '100') {
+    } else if (roomsCapacityValue.capacity === DIFFERENT_VALUE.zero && roomsCapacityValue.rooms !== DIFFERENT_VALUE.hundred) {
       field.setCustomValidity('Выберите вариант: 100 комнат.');
-    } else if (roomsCapacityValue.capacity !== '0' && roomsCapacityValue.rooms === '100') {
+    } else if (roomsCapacityValue.capacity !== DIFFERENT_VALUE.zero && roomsCapacityValue.rooms === DIFFERENT_VALUE.hundred) {
       field.setCustomValidity('100 комнат - не для гостей');
     } else {
       field.setCustomValidity('');

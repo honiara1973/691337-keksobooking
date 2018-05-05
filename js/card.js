@@ -2,16 +2,16 @@
 
 (function () {
 
-  var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
+  var PHOTO_SIZE = {width: '45', height: '40'};
 
-  var mapCardTypeRu = {
+  var MAP_CARD_TYPE_RU = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
     'house': 'Дом',
     'palace': 'Дворец'
   };
 
-  var featureClassListMap = {
+  var FEATURE_CLASS_LIST_MAP = {
     'wifi': 'popup__feature--wifi',
     'dishwasher': 'popup__feature--dishwasher',
     'parking': 'popup__feature--parking',
@@ -20,13 +20,15 @@
     'conditioner': 'popup__feature--conditioner'
   };
 
+  var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
+
   var addMapCardFeatures = function (domNode, features) {
 
     for (var j = 0; j < features.length; j++) {
       var mapCardFeature = document.createElement('li');
       mapCardFeature.classList.add('popup__feature');
-      mapCardFeature.classList.add(featureClassListMap[features[j]]);
-      mapCardFeature.textContent = featureClassListMap[features[j]];
+      mapCardFeature.classList.add(FEATURE_CLASS_LIST_MAP[features[j]]);
+      mapCardFeature.textContent = FEATURE_CLASS_LIST_MAP[features[j]];
       domNode.appendChild(mapCardFeature);
     }
 
@@ -38,8 +40,8 @@
       var mapCardPhoto = document.createElement('img');
       mapCardPhoto.classList.add('popup__photo');
       mapCardPhoto.src = images[j];
-      mapCardPhoto.width = '45';
-      mapCardPhoto.height = '40';
+      mapCardPhoto.width = PHOTO_SIZE.width;
+      mapCardPhoto.height = PHOTO_SIZE.height;
       mapCardPhoto.alt = 'Фотография жилья';
       domNode.appendChild(mapCardPhoto);
     }
@@ -52,7 +54,7 @@
     mapCardElement.querySelector('.popup__text--address').textContent = data.offer.address;
     mapCardElement.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
 
-    mapCardElement.querySelector('.popup__type').textContent = mapCardTypeRu[data.offer.type];
+    mapCardElement.querySelector('.popup__type').textContent = MAP_CARD_TYPE_RU[data.offer.type];
 
     mapCardElement.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты'
 + ' для ' + data.offer.guests + ' гостей';

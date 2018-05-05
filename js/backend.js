@@ -4,6 +4,7 @@
 
   var URL = 'https://js.dump.academy/keksobooking';
   var URL_DATA = 'https://js.dump.academy/keksobooking/data';
+  var LOAD_TIMEOUT = 10000;
 
   var checkLoad = function (xhr, onLoad, onError, timeout) {
 
@@ -34,7 +35,7 @@
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
-      checkLoad(xhr, onLoad, onError, 10000);
+      checkLoad(xhr, onLoad, onError, LOAD_TIMEOUT);
 
       xhr.open('POST', URL);
       xhr.send(data);
@@ -44,7 +45,7 @@
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
-      checkLoad(xhr, onLoad, onError, 10000);
+      checkLoad(xhr, onLoad, onError, LOAD_TIMEOUT);
 
       xhr.open('GET', URL_DATA);
       xhr.send();

@@ -2,6 +2,8 @@
 
 (function () {
   var DEBOUNCE_INTERVAL = 500;
+  var PRICE_LEVEL = {low: 10000, high: 50000};
+  var ROOM_CAPACITY_AMOUNT = {one: 1, two: 2, three: 3};
 
   var filters = document.querySelector('.map__filters');
   var propertyType = document.querySelector('#housing-type');
@@ -36,17 +38,17 @@
     switch (propertyPrice.value) {
       case 'middle':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.price <= 50000 && it.offer.price >= 10000;
+          return it.offer.price <= PRICE_LEVEL.high && it.offer.price >= PRICE_LEVEL.low;
         });
         break;
       case 'low':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.price <= 10000;
+          return it.offer.price <= PRICE_LEVEL.low;
         });
         break;
       case 'high':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.price >= 50000;
+          return it.offer.price >= PRICE_LEVEL.high;
         });
         break;
     }
@@ -54,17 +56,17 @@
     switch (propertyRoomNumber.value) {
       case '1':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.rooms === 1;
+          return it.offer.rooms === ROOM_CAPACITY_AMOUNT.one;
         });
         break;
       case '2':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.rooms === 2;
+          return it.offer.rooms === ROOM_CAPACITY_AMOUNT.two;
         });
         break;
       case '3':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.rooms === 3;
+          return it.offer.rooms === ROOM_CAPACITY_AMOUNT.three;
         });
         break;
     }
@@ -72,12 +74,12 @@
     switch (propertyCapacity.value) {
       case '1':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.guests === 1;
+          return it.offer.guests === ROOM_CAPACITY_AMOUNT.one;
         });
         break;
       case '2':
         filteredProperties = filteredProperties.filter(function (it) {
-          return it.offer.guests === 2;
+          return it.offer.guests === ROOM_CAPACITY_AMOUNT.two;
         });
         break;
     }
